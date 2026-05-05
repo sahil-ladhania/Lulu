@@ -1,0 +1,69 @@
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap');
+
+@import "tailwindcss";
+
+@theme inline {
+  /* Fonts */
+  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui;
+  --font-body: "Switzer", ui-sans-serif, system-ui;
+  --font-sans: var(--font-body);
+
+  /* Colors */
+  --color-lulu-bg: #0F0D0B;
+  --color-lulu-surface: #1C1916;
+  --color-lulu-elevated: #2A2725;
+  --color-lulu-cream: #F5F0E6;
+  --color-lulu-text-secondary: #A8A096;
+  --color-lulu-text-tertiary: #8A8174;
+  --color-lulu-text-quiet: #6B6359;
+  --color-lulu-border: #2A2725;
+  --color-lulu-border-default: #4A4641;
+  --color-lulu-marigold: #E89B23;
+  --color-lulu-peach: #FFB89E;
+  --color-lulu-danger: #E24B4A;
+
+  /* Border Radii */
+  --radius-lulu-sm: 8px;
+  --radius-lulu-md: 12px;
+  --radius-lulu-lg: 16px;
+
+  /* Shadcn standard overrides */
+  --color-background: var(--color-lulu-bg);
+  --color-foreground: var(--color-lulu-cream);
+  --color-border: var(--color-lulu-border);
+  --color-input: var(--color-lulu-border);
+  --color-ring: var(--color-lulu-marigold);
+  --color-primary: var(--color-lulu-marigold);
+  --color-primary-foreground: #0F0D0B;
+  --color-secondary: var(--color-lulu-surface);
+  --color-secondary-foreground: var(--color-lulu-cream);
+  --color-destructive: var(--color-lulu-danger);
+  --color-destructive-foreground: var(--color-lulu-cream);
+  --color-muted: var(--color-lulu-surface);
+  --color-muted-foreground: var(--color-lulu-text-secondary);
+
+  --radius: 0.5rem;
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-lulu-bg text-lulu-cream font-body lowercase;
+  }
+}
