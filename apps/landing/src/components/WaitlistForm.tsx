@@ -25,8 +25,20 @@ export const WaitlistForm = () => {
     }
     setSubmitting(true);
     try {
-      await submitWaitlist(email.trim());
-      setDone(true);
+      const result = await submitWaitlist(email.trim());
+      if (result.success) {
+        setDone(true);
+      } else {
+        setError(true);
+        setEmail(""); // Clear to show error placeholder
+        setFlashError(true);
+        setTimeout(() => setFlashError(false), 200);
+      }
+    } catch (err) {
+      setError(true);
+      setEmail(""); // Clear to show error placeholder
+      setFlashError(true);
+      setTimeout(() => setFlashError(false), 200);
     } finally {
       setSubmitting(false);
     }
