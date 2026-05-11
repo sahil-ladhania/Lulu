@@ -7,25 +7,34 @@ import { motion, AnimatePresence } from "framer-motion";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CITIES = ["Bangalore", "Mumbai", "Pune", "Hyderabad", "Delhi / NCR", "Other"];
 
+const CITY_HINTS: Record<string, string> = {
+  Bangalore: "awww ! how can i forget bengaluru ???",
+  Mumbai: "lulu's 2nd fav city.",
+  Pune: "pune's turn is coming. sit tight.",
+  Hyderabad: "hyderabad, you're closer than you think.",
+  "Delhi / NCR": "delhi's on the list. eventually.",
+  Other: "lulu travels. eventually.",
+};
+
 // ─── Input styles ─────────────────────────────────────────────────────────────
 const inputBase: React.CSSProperties = {
   padding: "13px 15px",
-  backgroundColor: "rgba(245,240,230,0.045)",
-  border: "1px solid rgba(245,240,230,0.07)",
+  backgroundColor: "rgba(245,240,230,0.06)",
+  border: "none",
   borderRadius: 10,
   fontSize: 15,
   color: "#F5F0E6",
   outline: "none",
+  boxShadow: "none",
   width: "100%",
-  transition: "border-color 0.2s, background-color 0.2s",
+  transition: "background-color 0.2s ease",
   fontFamily: "inherit",
 };
 const inputFocus: React.CSSProperties = {
-  borderColor: "rgba(232,155,35,0.38)",
-  backgroundColor: "rgba(245,240,230,0.065)",
+  backgroundColor: "rgba(245,240,230,0.10)",
 };
 const inputError: React.CSSProperties = {
-  borderColor: "rgba(226,75,74,0.5)",
+  border: "1px solid rgba(226,75,74,0.45)",
 };
 const placeholderColor = "rgba(245,240,230,0.25)";
 
@@ -82,13 +91,14 @@ const CityDropdown = ({
           ...inputBase,
           textAlign: "left",
           color: "#F5F0E6",
-          borderColor: open ? "rgba(232,155,35,0.38)" : "rgba(245,240,230,0.07)",
           backgroundColor: open
-            ? "rgba(245,240,230,0.065)"
-            : "rgba(245,240,230,0.045)",
+            ? "rgba(245,240,230,0.10)"
+            : "rgba(245,240,230,0.06)",
         }}
       >
-        <span>{value}</span>
+        <span style={{ color: value ? "#F5F0E6" : "rgba(245,240,230,0.25)" }}>
+          {value || "select your city"}
+        </span>
         <Chevron open={open} />
       </button>
 
@@ -181,11 +191,15 @@ const Field = ({
 export const WaitlistForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [city, setCity] = useState("Bangalore");
+  const [city, setCity] = useState("");
 
   const [errors, setErrors] = useState({ name: false, email: false });
   const [shaking, setShaking] = useState({ name: false, email: false });
   const [focused, setFocused] = useState({ name: false, email: false });
+  const [blurred, setBlurred] = useState({ name: false, email: false });
+  const [hovering, setHovering] = useState(false);
+  const [locking, setLocking] = useState(false);
+  const [cityTouched, setCityTouched] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -207,6 +221,7 @@ export const WaitlistForm = () => {
     if (newErrors.name || newErrors.email) {
       setErrors(newErrors);
       triggerShake(newErrors);
+      setLocking(false);
       return;
     }
     setSubmitting(true);
@@ -220,6 +235,7 @@ export const WaitlistForm = () => {
     } catch {
       setErrors({ name: false, email: true });
       triggerShake({ email: true });
+      setLocking(false);
     } finally {
       setSubmitting(false);
     }
@@ -268,6 +284,19 @@ export const WaitlistForm = () => {
       <style>{`
         .lulu-input::placeholder { color: ${placeholderColor}; }
         .lulu-input { caret-color: #E89B23; }
+        .lulu-input:focus,
+        .lulu-input:focus-visible,
+        .lulu-input:focus-within {
+          outline: none !important;
+          box-shadow: none !important;
+          border: none !important;
+        }
+        .lulu-input:not(:placeholder-shown),
+        .lulu-input:valid {
+          outline: none !important;
+          box-shadow: none !important;
+          border: none !important;
+        }
       `}</style>
 
       <form onSubmit={onSubmit} noValidate className="w-full flex flex-col gap-[14px]">
@@ -284,7 +313,10 @@ export const WaitlistForm = () => {
               if (errors.name) setErrors((p) => ({ ...p, name: false }));
             }}
             onFocus={() => setFocused((p) => ({ ...p, name: true }))}
-            onBlur={() => setFocused((p) => ({ ...p, name: false }))}
+            onBlur={() => {
+              setFocused((p) => ({ ...p, name: false }));
+              setBlurred((p) => ({ ...p, name: true }));
+            }}
             className="lulu-input font-body"
             style={{
               ...inputBase,
@@ -292,6 +324,22 @@ export const WaitlistForm = () => {
               ...(errors.name ? inputError : {}),
             }}
           />
+          {/* Name microcopy */}
+          <AnimatePresence>
+            {blurred.name && name.trim() && (
+              <motion.p
+                key="name-micro"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="font-body"
+                style={{ fontSize: 12, fontStyle: "italic", color: "#E89B23", paddingLeft: 2 }}
+              >
+                what your future match will know you as.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </Field>
 
         {/* Email */}
@@ -307,7 +355,10 @@ export const WaitlistForm = () => {
               if (errors.email) setErrors((p) => ({ ...p, email: false }));
             }}
             onFocus={() => setFocused((p) => ({ ...p, email: true }))}
-            onBlur={() => setFocused((p) => ({ ...p, email: false }))}
+            onBlur={() => {
+              setFocused((p) => ({ ...p, email: false }));
+              setBlurred((p) => ({ ...p, email: true }));
+            }}
             className="lulu-input font-body"
             style={{
               ...inputBase,
@@ -315,34 +366,80 @@ export const WaitlistForm = () => {
               ...(errors.email ? inputError : {}),
             }}
           />
+          {/* Email microcopy */}
+          <AnimatePresence>
+            {blurred.email && email.trim() && (
+              <motion.p
+                key="email-micro"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="font-body"
+                style={{ fontSize: 12, fontStyle: "italic", color: "#E89B23", paddingLeft: 2 }}
+              >
+                got it. this stays between us.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </Field>
 
         {/* City */}
         <Field id="city" label="city">
-          <CityDropdown value={city} onChange={setCity} />
+          <CityDropdown
+            value={city}
+            onChange={(v) => {
+              setCity(v);
+              setCityTouched(true);
+            }}
+          />
+          {/* City microcopy */}
+          <AnimatePresence>
+            {cityTouched && CITY_HINTS[city] && (
+              <motion.p
+                key={city}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="font-body"
+                style={{ fontSize: 12, fontStyle: "italic", color: "#E89B23", paddingLeft: 2 }}
+              >
+                {CITY_HINTS[city]}
+              </motion.p>
+            )}
+          </AnimatePresence>
         </Field>
 
         {/* CTA */}
-        <button
+        <motion.button
           type="submit"
-          disabled={submitting}
-          className="relative w-full mt-2 overflow-hidden font-display font-medium rounded-[10px] transition-transform active:scale-[0.985] disabled:opacity-60 group"
+          disabled={submitting || locking}
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
+          onClick={() => setLocking(true)}
+          whileHover={{ y: -1, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 24px rgba(232,155,35,0.45)" }}
+          whileTap={{ y: 1, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(232,155,35,0.25)" }}
+          className="relative w-full mt-2 overflow-hidden font-display font-medium rounded-[10px] disabled:opacity-60"
           style={{
-            fontSize: 16,
+            fontSize: 17,
             padding: "15px",
-            backgroundColor: "#E89B23",
+            background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 70%), #E89B23",
             color: "#0F0D0B",
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.03em",
             border: "none",
-            cursor: submitting ? "not-allowed" : "pointer",
+            cursor: submitting || locking ? "not-allowed" : "pointer",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 16px rgba(232,155,35,0.3)",
           }}
         >
           <span className="relative z-10 flex items-center justify-center gap-2">
-            {submitting ? "sending…" : <>i'm in <span>→</span></>}
+            {locking || submitting
+              ? "locking you in..."
+              : hovering
+              ? "you sure? (yes, go ahead)"
+              : <>i'm in <span>→</span></>}
           </span>
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-[0.08] transition-opacity z-0" />
-        </button>
+        </motion.button>
 
         {/* Legal */}
         <p

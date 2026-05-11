@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "lulu. — match deeper, reveal later",
+  title: "lulu. — match deeper, reveal later.",
   description: "coming soon. be first.",
   icons: {
     icon: "/branding/svg/lulu-mark-marigold.svg",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     shortcut: "/branding/svg/lulu-mark-marigold.svg",
   },
   openGraph: {
-    title: "lulu. — match deeper, reveal later",
+    title: "lulu. — match deeper, reveal later.",
     description: "coming soon. be first.",
     url: "https://getluluapp.in",
     siteName: "lulu.",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "lulu. — match deeper, reveal later",
+    title: "lulu. — match deeper, reveal later.",
     description: "coming soon. be first.",
     images: ["https://getluluapp.in/og.png"],
   },
