@@ -57,7 +57,7 @@ export default function Home() {
       >
 
       {/* ── NAV ────────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-7 pointer-events-none flex items-center">
+      <nav id="nav" className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-7 pointer-events-none flex items-center">
         <div className="flex items-center gap-2">
           <Logo variant="mark" color="marigold" size={20} />
           <div
@@ -75,7 +75,7 @@ export default function Home() {
       </nav>
 
       {/* ── SECTION 1 — HERO ────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-28 pb-[60px] z-[1]">
+      <section id="hero-section" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-28 pb-[60px] z-[1]">
 
         {/* Hero content */}
         <div className="relative z-10 flex flex-col items-center text-center max-w-[700px] w-full gap-7">
@@ -94,10 +94,11 @@ export default function Home() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease, delay: 0.35 }}
+            id="hero-headline"
             className="font-display font-medium text-lulu-cream"
-            style={{ fontSize: "clamp(52px, 9vw, 108px)", lineHeight: 1.00, letterSpacing: "-0.04em" }}
+            style={{ fontSize: "clamp(36px, 5.5vw, 68px)", lineHeight: 1.00, letterSpacing: "-0.04em" }}
           >
-            you've been matching with the wrong thing.
+            the most interesting thing about you<br /><span style={{ color: "#F5F0E6" }}>can't</span> be <span style={{ color: "#E89B23" }}>photographed.</span>
           </motion.h1>
 
           {/* Tagline */}
@@ -132,27 +133,29 @@ export default function Home() {
       </section>
 
       {/* ── SECTION 2 — INTRIGUE + FORM (two-column) ────────────────────────── */}
-      <section className="relative z-[1] flex items-center justify-center min-h-screen">
+      <section id="split-section" className="relative z-[1] flex items-center justify-center" style={{ minHeight: "calc(100vh - 56px)" }}>
         <div
+          id="split-container"
           className="w-full max-w-[1200px] mx-auto flex items-center gap-16
                      flex-col md:flex-row"
-          style={{ padding: "80px 48px" }}
+          style={{ padding: "40px 48px" }}
         >
           {/* ── LEFT — Intrigue copy ─────────────────────────────────────── */}
-          <div className="flex-1 flex flex-col gap-6 text-left">
+          <div id="intrigue-col" className="flex flex-col gap-6 text-left" style={{ flex: "0 0 55%", maxWidth: "55%" }}>
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.05 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="font-display font-medium leading-[1.1] tracking-[-0.025em]"
-              style={{ fontSize: "clamp(32px, 4.8vw, 56px)", color: "#F5F0E6" }}
+              style={{ fontSize: "clamp(24px, 3.2vw, 38px)", color: "#F5F0E6" }}
             >
               <span style={{ color: "#F5F0E6", display: "block" }}>
-                most apps ask you to lead with your face.
+                you already know a photo tells you nothing.<br />
+                you keep swiping anyway.
               </span>
-              <span style={{ color: "#E89B23", display: "block", marginTop: 4, fontSize: "1.15em" }}>
-                lulu doesn't.
+              <span id="punchline" style={{ color: "#E89B23", display: "block", marginTop: 4, fontSize: "1.15em", whiteSpace: "nowrap" }}>
+                lulu is for when you're done with that.
               </span>
             </motion.h2>
 
@@ -169,15 +172,16 @@ export default function Home() {
           </div>
 
           {/* ── RIGHT — Glass card + form ────────────────────────────────── */}
-          <div className="flex-1 flex justify-center w-full">
+          <div id="form-col" className="flex justify-center" style={{ flex: "0 0 45%", maxWidth: "45%" }}>
             <motion.div
+              id="form-card"
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.05 }}
               transition={{ duration: 0.85, ease: "easeOut" }}
               className="relative w-full max-w-[460px] rounded-[24px]"
               style={{
-                padding: "52px 44px 44px",
+                padding: "32px 36px 36px",
                 backgroundColor: "rgba(245,240,230,0.055)",
                 backdropFilter: "blur(40px) saturate(180%)",
                 WebkitBackdropFilter: "blur(40px) saturate(180%)",
@@ -195,9 +199,9 @@ export default function Home() {
               />
 
               {/* Card header */}
-              <div className="flex flex-col items-center text-center mb-9">
+              <div className="flex flex-col items-center text-center mb-5">
                 <span className="font-body font-medium text-[11px] uppercase tracking-[0.20em] text-lulu-marigold/75 mb-4">
-                  early access
+                  you're early.
                 </span>
                 <h2
                   className="font-display font-medium text-lulu-cream leading-tight mb-3"
@@ -209,7 +213,7 @@ export default function Home() {
                   className="font-body text-[14px] leading-relaxed"
                   style={{ color: "rgba(245,240,230,0.38)" }}
                 >
-                  we're launching city by city. we'll reach out when lulu goes live near you.
+                  we're launching city by city. be the first to know when lulu hits yours.
                 </p>
               </div>
 
@@ -221,7 +225,7 @@ export default function Home() {
 
 
       {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
-      <footer className="relative z-10 px-6 md:px-12 py-16 flex flex-col items-center gap-3">
+      <footer id="footer" className="relative z-10 px-12 py-4 flex flex-col items-center gap-2">
         {/* Logo + wordmark — same row */}
         <div className="flex items-center gap-2">
           <Logo
@@ -246,6 +250,49 @@ export default function Home() {
           © 2025 lulu. all rights reserved.
         </p>
       </footer>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-width: 768px) {
+          #nav { padding: 20px !important; }
+          #hero-section { 
+            padding: 120px 20px 80px !important; 
+            text-align: center !important; 
+          }
+          #hero-headline { 
+            font-size: clamp(32px, 8vw, 52px) !important; 
+          }
+          #split-section { 
+            min-height: auto !important; 
+            padding: 40px 20px !important; 
+          }
+          #split-container { 
+            flex-direction: column !important; 
+            gap: 48px !important;
+            padding: 40px 20px !important;
+          }
+          #intrigue-col { 
+            flex: 0 0 100% !important; 
+            max-width: 100% !important; 
+            text-align: center !important; 
+          }
+          #punchline { 
+            white-space: normal !important; 
+          }
+          #form-col { 
+            flex: 0 0 100% !important; 
+            max-width: 100% !important; 
+          }
+          #form-card { 
+            padding: 32px 20px !important; 
+            width: 100% !important; 
+          }
+          #footer { 
+            flex-direction: column !important; 
+            gap: 8px !important; 
+            text-align: center !important; 
+            padding: 20px !important; 
+          }
+        }
+      `}} />
     </motion.div>
     </>
   );

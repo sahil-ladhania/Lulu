@@ -2,17 +2,18 @@
 
 import { useState, FormEvent, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Toast, ToastType } from "@/components/Toast";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CITIES = ["Bangalore", "Mumbai", "Pune", "Hyderabad", "Delhi / NCR", "Other"];
+const CITIES = ["Bangalore", "Pune", "Delhi / NCR", "Mumbai", "Hyderabad", "Other"];
 
 const CITY_HINTS: Record<string, string> = {
   Bangalore: "awww ! how can i forget bengaluru ???",
-  Mumbai: "lulu's 2nd fav city.",
   Pune: "pune's turn is coming. sit tight.",
-  Hyderabad: "hyderabad, you're closer than you think.",
   "Delhi / NCR": "delhi's on the list. eventually.",
+  Mumbai: "lulu's 2nd fav city.",
+  Hyderabad: "hyderabad, you're closer than you think.",
   Other: "lulu travels. eventually.",
 };
 
@@ -28,14 +29,12 @@ const inputBase: React.CSSProperties = {
   boxShadow: "none",
   width: "100%",
   transition: "background-color 0.2s ease",
-  fontFamily: "inherit",
+  fontFamily: "'Switzer', sans-serif",
 };
 const inputFocus: React.CSSProperties = {
   backgroundColor: "rgba(245,240,230,0.10)",
 };
-const inputError: React.CSSProperties = {
-  border: "1px solid rgba(226,75,74,0.45)",
-};
+// inputError removed — validation uses quirky placeholders instead
 const placeholderColor = "rgba(245,240,230,0.25)";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -64,10 +63,13 @@ const Chevron = ({ open }: { open: boolean }) => (
 const CityDropdown = ({
   value,
   onChange,
+  quirkyPlaceholder,
 }: {
   value: string;
   onChange: (v: string) => void;
+  quirkyPlaceholder?: boolean;
 }) => {
+  const showQuirky = quirkyPlaceholder && !value;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -91,13 +93,19 @@ const CityDropdown = ({
           ...inputBase,
           textAlign: "left",
           color: "#F5F0E6",
-          backgroundColor: open
-            ? "rgba(245,240,230,0.10)"
-            : "rgba(245,240,230,0.06)",
+          backgroundColor: "rgba(245,240,230,0.06)",
         }}
       >
-        <span style={{ color: value ? "#F5F0E6" : "rgba(245,240,230,0.25)" }}>
-          {value || "select your city"}
+        <span
+          style={{
+            color: value
+              ? "#F5F0E6"
+              : showQuirky
+              ? "rgba(232,155,35,0.7)"
+              : "rgba(245,240,230,0.25)",
+          }}
+        >
+          {value || (showQuirky ? "pick a city. any city." : "select your city")}
         </span>
         <Chevron open={open} />
       </button>
@@ -110,13 +118,11 @@ const CityDropdown = ({
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
             exit={{ opacity: 0, y: -6, scaleY: 0.95 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-0 right-0 top-[calc(100%+6px)] rounded-[12px] z-50 py-1"
+            className="absolute left-0 right-0 top-[calc(100%+6px)] rounded-[10px] z-50 py-1 overflow-hidden"
             style={{
               transformOrigin: "top",
-              backgroundColor: "rgba(28,25,22,0.95)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              border: "1px solid rgba(245,240,230,0.1)",
+              backgroundColor: "#1C1916",
+              border: "1px solid rgba(245,240,230,0.08)",
               boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
             } as React.CSSProperties}
           >
@@ -130,21 +136,23 @@ const CityDropdown = ({
                     onChange(city);
                     setOpen(false);
                   }}
-                  className="w-full flex items-center justify-between font-body text-[15px] px-4 py-3 transition-colors duration-150 cursor-pointer"
+                  className="w-full flex items-center justify-between font-body text-[15px] px-4 py-[13px] transition-all duration-150 cursor-pointer"
                   style={{
                     color: isSelected ? "#E89B23" : "rgba(245,240,230,0.75)",
                     backgroundColor: "transparent",
                     border: "none",
                     textAlign: "left",
-                    fontFamily: "inherit",
+                    fontFamily: "'Switzer', sans-serif",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                      "rgba(245,240,230,0.05)";
+                    const target = e.currentTarget as HTMLButtonElement;
+                    target.style.backgroundColor = "rgba(245,240,230,0.06)";
+                    target.style.color = "#E89B23";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                      "transparent";
+                    const target = e.currentTarget as HTMLButtonElement;
+                    target.style.backgroundColor = "transparent";
+                    target.style.color = isSelected ? "#E89B23" : "rgba(245,240,230,0.75)";
                   }}
                 >
                   <span>{city}</span>
@@ -165,21 +173,17 @@ const CityDropdown = ({
 const Field = ({
   id,
   label,
-  hasError,
-  shaking,
   children,
 }: {
   id: string;
   label: string;
-  hasError?: boolean;
-  shaking?: boolean;
   children: React.ReactNode;
 }) => (
-  <div className={`flex flex-col gap-1.5 ${shaking ? "animate-shake" : ""}`}>
+  <div className="flex flex-col gap-1.5">
     <label
       htmlFor={id}
       className="font-body font-medium text-[11px] uppercase tracking-[0.14em] px-1"
-      style={{ color: hasError ? "rgba(226,75,74,0.7)" : "rgba(245,240,230,0.35)" }}
+      style={{ color: "rgba(245,240,230,0.35)" }}
     >
       {label}
     </label>
@@ -193,41 +197,40 @@ export const WaitlistForm = () => {
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
 
-  const [errors, setErrors] = useState({ name: false, email: false });
-  const [shaking, setShaking] = useState({ name: false, email: false });
+  const [quirky, setQuirky] = useState({ name: false, email: false, city: false });
   const [focused, setFocused] = useState({ name: false, email: false });
   const [blurred, setBlurred] = useState({ name: false, email: false });
   const [hovering, setHovering] = useState(false);
   const [locking, setLocking] = useState(false);
   const [cityTouched, setCityTouched] = useState(false);
-  const [duplicateMsg, setDuplicateMsg] = useState(false);
+
+  // Toast
+  const [toast, setToast] = useState<{ message: string; type: ToastType; id: number } | null>(null);
 
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
-  const triggerShake = (fields: { name?: boolean; email?: boolean }) => {
-    setShaking((p) => ({ ...p, ...fields }));
-    setTimeout(
-      () => setShaking((p) => ({ ...p, name: false, email: false })),
-      300
-    );
+  const showToast = (message: string, type: ToastType) => {
+    setToast({ message, type, id: Date.now() });
   };
+
+  const dismissToast = () => setToast(null);
+
+
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     // Front-end validation
-    const newErrors = {
-      name: !name.trim(),
-      email: !EMAIL_RE.test(email.trim()),
-    };
-    if (newErrors.name || newErrors.email) {
-      setErrors(newErrors);
-      triggerShake(newErrors);
+    const needsName = !name.trim();
+    const needsEmail = !EMAIL_RE.test(email.trim());
+    if (needsName || needsEmail) {
+      setQuirky((p) => ({ ...p, name: needsName, email: needsEmail }));
       return;
     }
     if (!city) {
-      alert("please select your city.");
+      setQuirky((p) => ({ ...p, city: true }));
+      showToast("please select your city.", "warning");
       return;
     }
 
@@ -244,12 +247,17 @@ export const WaitlistForm = () => {
 
       const data = await res.json();
 
+      // Duplicate email
       if (res.status === 409) {
-        setDuplicateMsg(true);
-        setTimeout(() => {
-          setDuplicateMsg(false);
-          setLocking(false);
-        }, 3000);
+        showToast("you’re already on the list. we haven’t forgotten you.", "warning");
+        setLocking(false);
+        return;
+      }
+
+      // Disposable email blocked by API
+      if (res.status === 400 && data.error?.includes("real email")) {
+        showToast("that email won’t work. use a real one.", "error");
+        setLocking(false);
         return;
       }
 
@@ -257,13 +265,11 @@ export const WaitlistForm = () => {
         throw new Error(data.error || "something went wrong.");
       }
 
-      // Success
-      alert("you're on the list! we'll reach out when lulu goes live in " + city + ".");
+      // Success — in-card success state handles UI, no toast needed
       setDone(true);
 
-    } catch (err: any) {
-      alert("error: " + (err?.message || "something went wrong. please try again."));
-      setErrors({ name: false, email: false });
+    } catch {
+      showToast("something went wrong. try again in a bit.", "error");
       setLocking(false);
     } finally {
       setSubmitting(false);
@@ -312,6 +318,7 @@ export const WaitlistForm = () => {
       {/* Placeholder color via a global style tag */}
       <style>{`
         .lulu-input::placeholder { color: ${placeholderColor}; }
+        .lulu-input-quirky::placeholder { color: rgba(232,155,35,0.7) !important; }
         .lulu-input { caret-color: #E89B23; }
         .lulu-input:focus,
         .lulu-input:focus-visible,
@@ -328,29 +335,28 @@ export const WaitlistForm = () => {
         }
       `}</style>
 
-      <form onSubmit={onSubmit} noValidate className="w-full flex flex-col gap-[14px]">
+      <form onSubmit={onSubmit} noValidate className="w-full flex flex-col gap-[10px]">
         {/* Name */}
-        <Field id="name" label="name" hasError={errors.name} shaking={shaking.name}>
+        <Field id="name" label="name">
           <input
             id="name"
             type="text"
             value={name}
-            placeholder="your name"
+            placeholder={quirky.name ? "we need something to call you." : "your name"}
             autoComplete="name"
             onChange={(e) => {
               setName(e.target.value);
-              if (errors.name) setErrors((p) => ({ ...p, name: false }));
+              if (quirky.name) setQuirky((p) => ({ ...p, name: false }));
             }}
             onFocus={() => setFocused((p) => ({ ...p, name: true }))}
             onBlur={() => {
               setFocused((p) => ({ ...p, name: false }));
               setBlurred((p) => ({ ...p, name: true }));
             }}
-            className="lulu-input font-body"
+            className={`lulu-input font-body${quirky.name ? " lulu-input-quirky" : ""}`}
             style={{
               ...inputBase,
-              ...(focused.name && !errors.name ? inputFocus : {}),
-              ...(errors.name ? inputError : {}),
+              ...(focused.name ? inputFocus : {}),
             }}
           />
           {/* Name microcopy */}
@@ -372,27 +378,26 @@ export const WaitlistForm = () => {
         </Field>
 
         {/* Email */}
-        <Field id="email" label="email" hasError={errors.email} shaking={shaking.email}>
+        <Field id="email" label="email">
           <input
             id="email"
             type="email"
             value={email}
-            placeholder="your email"
+            placeholder={quirky.email ? "how else will we find you?" : "your email"}
             autoComplete="email"
             onChange={(e) => {
               setEmail(e.target.value);
-              if (errors.email) setErrors((p) => ({ ...p, email: false }));
+              if (quirky.email) setQuirky((p) => ({ ...p, email: false }));
             }}
             onFocus={() => setFocused((p) => ({ ...p, email: true }))}
             onBlur={() => {
               setFocused((p) => ({ ...p, email: false }));
               setBlurred((p) => ({ ...p, email: true }));
             }}
-            className="lulu-input font-body"
+            className={`lulu-input font-body${quirky.email ? " lulu-input-quirky" : ""}`}
             style={{
               ...inputBase,
-              ...(focused.email && !errors.email ? inputFocus : {}),
-              ...(errors.email ? inputError : {}),
+              ...(focused.email ? inputFocus : {}),
             }}
           />
           {/* Email microcopy */}
@@ -417,9 +422,11 @@ export const WaitlistForm = () => {
         <Field id="city" label="city">
           <CityDropdown
             value={city}
+            quirkyPlaceholder={quirky.city}
             onChange={(v) => {
               setCity(v);
               setCityTouched(true);
+              if (quirky.city) setQuirky((p) => ({ ...p, city: false }));
             }}
           />
           {/* City microcopy */}
@@ -460,14 +467,23 @@ export const WaitlistForm = () => {
             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 16px rgba(232,155,35,0.3)",
           }}
         >
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            {duplicateMsg
-              ? "you're already on the list."
-              : locking || submitting
-              ? "locking you in..."
-              : hovering
-              ? "you sure? (yes, go ahead)"
-              : <>i'm in <span>→</span></>}
+          <span className="relative z-10 flex items-center justify-center gap-2 h-[24px]">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={locking || submitting ? "loading" : hovering ? "hover" : "default"}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex items-center justify-center gap-2 w-full"
+              >
+                {locking || submitting
+                  ? "obviously locking you in..."
+                  : hovering
+                  ? "go on — you know you want to."
+                  : <>i'm in. obviously. <span>→</span></>}
+              </motion.span>
+            </AnimatePresence>
           </span>
         </motion.button>
 
@@ -476,9 +492,19 @@ export const WaitlistForm = () => {
           className="font-body text-center mt-1"
           style={{ fontSize: 12, color: "rgba(245,240,230,0.22)" }}
         >
-          no spam. ever. we'll only write when your city goes live.
+          one email. when your city goes live. that's it.
         </p>
       </form>
+
+      {/* Toast */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          id={toast.id}
+          onDismiss={dismissToast}
+        />
+      )}
     </>
   );
 };
