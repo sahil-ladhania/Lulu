@@ -195,7 +195,10 @@ export default function Home() {
       </section>
 
       {/* ── SECTION 2 — INTRIGUE + FORM (two-column) ────────────────────────── */}
-      <section id="split-section" className="relative z-[1] flex items-center justify-center" style={{ minHeight: "calc(100vh - 56px)" }}>
+      <section id="split-section" className="relative z-[1] flex items-center justify-center" style={{ 
+        minHeight: "calc(100vh - 56px)",
+        background: "radial-gradient(ellipse at 70% 50%, rgba(255, 255, 255, 0.015) 0%, transparent 65%)"
+      }}>
         <div
           id="split-container"
           className="w-full max-w-[1200px] mx-auto flex items-center gap-16
@@ -244,11 +247,11 @@ export default function Home() {
               className="relative w-full max-w-[460px] rounded-[24px]"
               style={{
                 padding: "32px 36px 36px",
-                backgroundColor: "rgba(245,240,230,0.055)",
-                backdropFilter: "blur(40px) saturate(180%)",
-                WebkitBackdropFilter: "blur(40px) saturate(180%)",
-                border: "1px solid rgba(245,240,230,0.12)",
-                boxShadow: "inset 0 1px 0 rgba(245,240,230,0.08), 0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px rgba(232,155,35,0.06)",
+                backgroundColor: "rgba(245,240,230,0.03)",
+                backdropFilter: "blur(60px) saturate(120%)",
+                WebkitBackdropFilter: "blur(60px) saturate(120%)",
+                border: "1px solid rgba(245,240,230,0.06)",
+                boxShadow: "inset 0 1px 0 rgba(245,240,230,0.05), 0 32px 64px rgba(0, 0, 0, 0.5)",
               }}
             >
               {/* Top-edge marigold glow */}
@@ -329,6 +332,39 @@ export default function Home() {
         </div>
       </footer>
       <style dangerouslySetInnerHTML={{ __html: `
+        @media (min-width: 769px) and (max-width: 1024px) {
+          #split-section {
+            min-height: auto !important;
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+          }
+          #split-container {
+            padding: 40px 32px !important;
+            gap: 24px !important;
+          }
+          #intrigue-col {
+            flex: 0 0 45% !important;
+            max-width: 45% !important;
+          }
+          #intrigue-col h2 {
+            font-size: clamp(20px, 2.8vw, 28px) !important;
+            line-height: 1.25 !important;
+          }
+          #punchline {
+            white-space: normal !important;
+          }
+          #form-col {
+            flex: 0 0 55% !important;
+            max-width: 55% !important;
+          }
+          #form-card {
+            padding: 32px 28px !important;
+            width: 100% !important;
+          }
+          #footer {
+            padding: 24px 32px !important;
+          }
+        }
         @media (max-width: 768px) {
           #nav { padding: 20px !important; }
           #hero-section { 

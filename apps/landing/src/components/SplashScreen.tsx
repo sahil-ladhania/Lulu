@@ -66,57 +66,60 @@ export const SplashScreen = ({ onDone }: { onDone: () => void }) => {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             style={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               alignItems: "center",
-              gap: 10,
             }}
           >
-            {/* Mark */}
-            <Logo variant="mark" color="marigold" size={28} />
+            {/* ROW 1: Mark + Wordmark */}
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 12 }}>
+              {/* Mark */}
+              <Logo variant="mark" color="marigold" size={64} />
 
-            {/* Wordmark text */}
-            <div
-              style={{
-                fontFamily: "'Cabinet Grotesk', sans-serif",
-                fontWeight: 500,
-                fontSize: 36,
-                letterSpacing: "-0.04em",
-                color: "#F5F0E6",
-                display: "flex",
-                alignItems: "baseline",
-                lineHeight: 1,
-              }}
-            >
-              lulu
-              <motion.span
-                animate={{
-                  opacity: [1, 0.65, 1],
-                  filter: [
-                    "drop-shadow(0 0 6px rgba(232,155,35,0.4))",
-                    "drop-shadow(0 0 18px rgba(232,155,35,0.9))",
-                    "drop-shadow(0 0 6px rgba(232,155,35,0.4))",
-                  ],
+              {/* Wordmark text */}
+              <div
+                style={{
+                  fontFamily: "'Cabinet Grotesk', sans-serif",
+                  fontWeight: 500,
+                  fontSize: 52,
+                  letterSpacing: "-0.04em",
+                  color: "#F5F0E6",
+                  display: "flex",
+                  alignItems: "baseline",
+                  lineHeight: 1,
+                  marginTop: 0,
                 }}
-                transition={{ duration: 3.5, ease: "easeInOut", repeat: Infinity }}
-                style={{ display: "inline-block", color: "#E89B23", marginLeft: 1 }}
               >
-                .
-              </motion.span>
+                lulu
+                <motion.span
+                  animate={{
+                    opacity: [1, 0.65, 1],
+                    filter: [
+                      "drop-shadow(0 0 6px rgba(232,155,35,0.4))",
+                      "drop-shadow(0 0 18px rgba(232,155,35,0.9))",
+                      "drop-shadow(0 0 6px rgba(232,155,35,0.4))",
+                    ],
+                  }}
+                  transition={{ duration: 3.5, ease: "easeInOut", repeat: Infinity }}
+                  style={{ display: "inline-block", color: "#E89B23", marginLeft: 1 }}
+                >
+                  .
+                </motion.span>
+              </div>
             </div>
           </motion.div>
 
           {/* Tagline */}
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
+            animate={{ opacity: 0.5 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.8 }}
             style={{
               fontFamily: "'Switzer', sans-serif",
-              fontWeight: 400,
-              fontSize: 13,
+              fontWeight: 500,
+              fontSize: 16,
               color: "#F5F0E6",
               letterSpacing: "0.04em",
-              marginTop: 16,
+              marginTop: 12,
             }}
           >
             match deeper, reveal later.
