@@ -118,10 +118,18 @@ export default function Home() {
             style={{ fontSize: 20, letterSpacing: "-0.04em", lineHeight: 1 }}
           >
             lulu
-            <motion.span
-              className="inline-block w-[4px] h-[4px] rounded-full bg-lulu-marigold ml-[2px]"
-              animate={pulseGlow.animate}
-              transition={pulseGlow.transition}
+            <span
+              style={{
+                display: "inline-block",
+                width: "4px",
+                height: "4px",
+                borderRadius: "50%",
+                background: "#E89B23",
+                marginLeft: "1px",
+                verticalAlign: "middle",
+                position: "relative",
+                bottom: "1px"
+              }}
             />
           </div>
         </div>
@@ -135,11 +143,17 @@ export default function Home() {
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 0.75, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease, delay: 0.15 }}
-            className="font-body font-medium text-[11px] uppercase tracking-[0.22em] text-lulu-marigold"
+            className="inline-flex items-center gap-2"
           >
-            coming soon
+            <div className="pulse-dot w-[7px] h-[7px]" style={{ borderRadius: "50%", background: "#E89B23" }} />
+            <span 
+              className="font-body font-medium text-[11px] uppercase tracking-[0.18em] text-[#E89B23] opacity-[0.85]"
+              style={{ fontFamily: "'Switzer', sans-serif" }}
+            >
+              waitlist is open.
+            </span>
           </motion.div>
 
           {/* Headline */}
@@ -263,25 +277,6 @@ export default function Home() {
                 }}
               />
 
-              {/* Card header */}
-              <div className="flex flex-col items-center text-center mb-5">
-                <span className="font-body font-medium text-[11px] uppercase tracking-[0.20em] text-lulu-marigold/75 mb-4">
-                  you're early.
-                </span>
-                <h2
-                  className="font-display font-medium text-lulu-cream leading-tight mb-3"
-                  style={{ fontSize: 34, letterSpacing: "-0.03em" }}
-                >
-                  be first.
-                </h2>
-                <p
-                  className="font-body text-[14px] leading-relaxed"
-                  style={{ color: "rgba(245,240,230,0.38)" }}
-                >
-                  we're launching city by city. be the first to know when lulu hits yours.
-                </p>
-              </div>
-
               <WaitlistForm onSubmitted={() => setFormSubmitted(true)} />
             </motion.div>
           </div>
@@ -304,7 +299,17 @@ export default function Home() {
             style={{ fontSize: 15, letterSpacing: "-0.03em", color: "rgba(245, 240, 230, 0.5)" }}
           >
             lulu
-            <div className="w-[3px] h-[3px] rounded-full bg-lulu-marigold ml-[1.5px]" />
+            <span style={{
+              display: "inline-block",
+              width: "4px",
+              height: "4px",
+              borderRadius: "50%",
+              background: "#E89B23",
+              marginLeft: "1px",
+              verticalAlign: "middle",
+              position: "relative",
+              bottom: "1px"
+            }} />
           </div>
         </div>
 
@@ -419,6 +424,14 @@ export default function Home() {
         .social-icon:hover {
           opacity: 1;
           color: #E89B23;
+        }
+        @keyframes pulse-ring {
+          0%   { box-shadow: 0 0 0 0 rgba(232, 155, 35, 0.5); }
+          70%  { box-shadow: 0 0 0 8px rgba(232, 155, 35, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(232, 155, 35, 0); }
+        }
+        .pulse-dot {
+          animation: pulse-ring 2s infinite;
         }
       `}} />
     </motion.div>

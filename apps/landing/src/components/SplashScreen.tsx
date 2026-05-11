@@ -90,20 +90,19 @@ export const SplashScreen = ({ onDone }: { onDone: () => void }) => {
                 }}
               >
                 lulu
-                <motion.span
-                  animate={{
-                    opacity: [1, 0.65, 1],
-                    filter: [
-                      "drop-shadow(0 0 6px rgba(232,155,35,0.4))",
-                      "drop-shadow(0 0 18px rgba(232,155,35,0.9))",
-                      "drop-shadow(0 0 6px rgba(232,155,35,0.4))",
-                    ],
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    background: "#E89B23",
+                    marginLeft: "2px",
+                    verticalAlign: "middle",
+                    position: "relative",
+                    bottom: "2px"
                   }}
-                  transition={{ duration: 3.5, ease: "easeInOut", repeat: Infinity }}
-                  style={{ display: "inline-block", color: "#E89B23", marginLeft: 1 }}
-                >
-                  .
-                </motion.span>
+                />
               </div>
             </div>
           </motion.div>

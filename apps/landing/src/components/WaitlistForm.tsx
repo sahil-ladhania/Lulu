@@ -157,7 +157,7 @@ const CityDropdown = ({
                 >
                   <span>{city}</span>
                   {isSelected && (
-                    <div className="w-[5px] h-[5px] rounded-full bg-lulu-marigold" />
+                    <div className="w-[5px] h-[5px] bg-lulu-marigold" style={{ borderRadius: "50%" }} />
                   )}
                 </button>
               );
@@ -315,6 +315,9 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
 
   // ── Success state ───────────────────────────────────────────────────────────
   if (done) {
+    const raw = name.trim().split(" ")[0];
+    const firstName = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
+    
     return (
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -322,28 +325,20 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
         transition={{ duration: 0.65, ease: "easeOut" }}
         className="flex flex-col items-center text-center w-full py-4"
       >
-        <div
-          className="flex items-center justify-center w-[52px] h-[52px] rounded-full mb-6"
-          style={{ border: "1px solid rgba(232,155,35,0.35)" }}
-        >
-          <svg width="20" height="15" viewBox="0 0 20 15" fill="none">
-            <path
-              d="M2 7.5L7.5 13L18 2"
-              stroke="#E89B23"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
+        <img 
+          src="/branding/png/lulu-mark-marigold.png" 
+          alt="lulu" 
+          style={{ width: "52px", height: "52px", objectFit: "contain", marginBottom: "24px" }} 
+        />
         <h3
-          className="font-display font-medium text-lulu-cream mb-2"
-          style={{ fontSize: 28, letterSpacing: "-0.03em" }}
+          className="font-display font-medium text-lulu-cream mb-3"
+          style={{ fontSize: 28, letterSpacing: "-0.03em", lineHeight: 1.25 }}
         >
-          you're on the list.
+          lulu, meet {firstName}.<br />
+          {firstName}, meet lulu.
         </h3>
         <p className="font-body text-[14px]" style={{ color: "rgba(245,240,230,0.38)" }}>
-          we'll reach out when lulu goes live in your city.
+          until then — tell someone interesting about us.
         </p>
       </motion.div>
     );
@@ -371,6 +366,25 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
           border: none !important;
         }
       `}</style>
+
+      {/* Card header */}
+      <div className="flex flex-col items-center text-center mb-5">
+        <span className="font-body font-medium text-[11px] uppercase tracking-[0.20em] text-lulu-marigold/75 mb-4">
+          you're early.
+        </span>
+        <h2
+          className="font-display font-medium text-lulu-cream leading-tight mb-3"
+          style={{ fontSize: 34, letterSpacing: "-0.03em" }}
+        >
+          be first.
+        </h2>
+        <p
+          className="font-body text-[14px] leading-relaxed"
+          style={{ color: "rgba(245,240,230,0.38)" }}
+        >
+          we're launching city by city. be the first to know when lulu hits yours.
+        </p>
+      </div>
 
       <form onSubmit={onSubmit} noValidate className="w-full flex flex-col gap-[10px]">
         {/* Name */}
