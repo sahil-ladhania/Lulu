@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Logo } from "@lulu/ui/components";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { SplashScreen } from "@/components/SplashScreen";
 
 // ─── Animation constants ──────────────────────────────────────────────────────
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -39,8 +41,20 @@ const revealChild = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
+  const [splashDone, setSplashDone] = useState(false);
+
   return (
-    <div className="relative bg-lulu-bg text-lulu-cream overflow-x-hidden lowercase">
+    <>
+      <SplashScreen onDone={() => setSplashDone(true)} />
+
+      {/* Main content — fades in as splash fades out */}
+      <motion.div
+        id="main-content"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: splashDone ? 1 : 0 }}
+        transition={{ duration: 0.7, ease: "easeInOut" }}
+        className="relative bg-lulu-bg text-lulu-cream overflow-x-hidden lowercase"
+      >
 
       {/* ── NAV ────────────────────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-7 pointer-events-none flex items-center">
@@ -232,6 +246,7 @@ export default function Home() {
           © 2025 lulu. all rights reserved.
         </p>
       </footer>
-    </div>
+    </motion.div>
+    </>
   );
 }
