@@ -200,6 +200,7 @@ export const WaitlistForm = () => {
   const [hovering, setHovering] = useState(false);
   const [locking, setLocking] = useState(false);
   const [cityTouched, setCityTouched] = useState(false);
+  const [duplicateMsg, setDuplicateMsg] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -214,6 +215,8 @@ export const WaitlistForm = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Front-end validation
     const newErrors = {
       name: !name.trim(),
       email: !EMAIL_RE.test(email.trim()),
@@ -221,20 +224,46 @@ export const WaitlistForm = () => {
     if (newErrors.name || newErrors.email) {
       setErrors(newErrors);
       triggerShake(newErrors);
-      setLocking(false);
       return;
     }
+    if (!city) {
+      alert("please select your city.");
+      return;
+    }
+
+    // Lock UI
+    setLocking(true);
     setSubmitting(true);
+
     try {
-      await fetch("https://api.getluluapp.in/waitlist", {
+      const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), email: email.trim(), city }),
       });
+
+      const data = await res.json();
+
+      if (res.status === 409) {
+        setDuplicateMsg(true);
+        setTimeout(() => {
+          setDuplicateMsg(false);
+          setLocking(false);
+        }, 3000);
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(data.error || "something went wrong.");
+      }
+
+      // Success
+      alert("you're on the list! we'll reach out when lulu goes live in " + city + ".");
       setDone(true);
-    } catch {
-      setErrors({ name: false, email: true });
-      triggerShake({ email: true });
+
+    } catch (err: any) {
+      alert("error: " + (err?.message || "something went wrong. please try again."));
+      setErrors({ name: false, email: false });
       setLocking(false);
     } finally {
       setSubmitting(false);
@@ -417,7 +446,6 @@ export const WaitlistForm = () => {
           disabled={submitting || locking}
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}
-          onClick={() => setLocking(true)}
           whileHover={{ y: -1, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 24px rgba(232,155,35,0.45)" }}
           whileTap={{ y: 1, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(232,155,35,0.25)" }}
           className="relative w-full mt-2 overflow-hidden font-display font-medium rounded-[10px] disabled:opacity-60"
@@ -433,7 +461,9 @@ export const WaitlistForm = () => {
           }}
         >
           <span className="relative z-10 flex items-center justify-center gap-2">
-            {locking || submitting
+            {duplicateMsg
+              ? "you're already on the list."
+              : locking || submitting
               ? "locking you in..."
               : hovering
               ? "you sure? (yes, go ahead)"
