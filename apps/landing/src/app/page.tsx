@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@lulu/ui/components";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { SplashScreen } from "@/components/SplashScreen";
@@ -42,6 +42,59 @@ const revealChild = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [splashDone, setSplashDone] = useState(false);
+  const [taglineText, setTaglineText] = useState("match deeper, reveal later.");
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const hasTriggeredTagline = useRef(false);
+
+  // Easter Egg 1: Tab Title
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "come back. lulu misses you.";
+      } else {
+        document.title = "lulu. — match deeper, reveal later.";
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  // Easter Egg 2: Idle Tagline
+  useEffect(() => {
+    if (formSubmitted) return;
+
+    let idleTimeout: NodeJS.Timeout;
+    const startTime = Date.now();
+
+    const resetTimer = () => {
+      clearTimeout(idleTimeout);
+      // Only start timing if 5s have passed since mount
+      if (Date.now() - startTime < 5000) return;
+      if (hasTriggeredTagline.current) return;
+
+      idleTimeout = setTimeout(() => {
+        if (hasTriggeredTagline.current || formSubmitted) return;
+        hasTriggeredTagline.current = true;
+        setTaglineText("still here? good. so are we.");
+        
+        setTimeout(() => {
+          setTaglineText("match deeper, reveal later.");
+        }, 5000);
+      }, 30000);
+    };
+
+    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+    events.forEach(ev => window.addEventListener(ev, resetTimer));
+    
+    // Initial start after 5s
+    const initialStart = setTimeout(resetTimer, 5000);
+
+    return () => {
+      clearTimeout(idleTimeout);
+      clearTimeout(initialStart);
+      events.forEach(ev => window.removeEventListener(ev, resetTimer));
+    };
+  }, [formSubmitted]);
 
   return (
     <>
@@ -101,15 +154,24 @@ export default function Home() {
             the most interesting thing about you<br /><span style={{ color: "#F5F0E6" }}>can't</span> be <span style={{ color: "#E89B23" }}>photographed.</span>
           </motion.h1>
 
-          {/* Tagline */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 0.6 }}
+            className="h-[24px]"
           >
-            <p className="font-body text-[17px] text-lulu-cream/45 tracking-[-0.01em]">
-              match deeper, reveal later.
-            </p>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={taglineText}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.45 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+                className="font-body text-[17px] text-lulu-cream tracking-[-0.01em]"
+              >
+                {taglineText}
+              </motion.p>
+            </AnimatePresence>
           </motion.div>
         </div>
 
@@ -217,7 +279,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <WaitlistForm />
+              <WaitlistForm onSubmitted={() => setFormSubmitted(true)} />
             </motion.div>
           </div>
         </div>

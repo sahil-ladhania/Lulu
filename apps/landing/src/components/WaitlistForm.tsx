@@ -192,7 +192,7 @@ const Field = ({
 );
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export const WaitlistForm = () => {
+export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
@@ -209,6 +209,42 @@ export const WaitlistForm = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [idleMessage, setIdleMessage] = useState<string | null>(null);
+  const hasTriggeredCTA = useRef(false);
+
+  useEffect(() => {
+    if (done) return;
+
+    let idleTimeout: NodeJS.Timeout;
+    const startTime = Date.now();
+
+    const resetTimer = () => {
+      clearTimeout(idleTimeout);
+      setIdleMessage(null);
+      
+      // Only start timing if 5s have passed since mount
+      if (Date.now() - startTime < 5000) return;
+      if (hasTriggeredCTA.current) return;
+
+      idleTimeout = setTimeout(() => {
+        if (hasTriggeredCTA.current || done || submitting || locking) return;
+        hasTriggeredCTA.current = true;
+        setIdleMessage("still thinking? it's okay.");
+      }, 45000);
+    };
+
+    const events = ["mousemove", "mousedown", "keypress", "scroll", "touchstart"];
+    events.forEach(ev => window.addEventListener(ev, resetTimer));
+    
+    // Initial start after 5s
+    const initialStart = setTimeout(resetTimer, 5000);
+
+    return () => {
+      clearTimeout(idleTimeout);
+      clearTimeout(initialStart);
+      events.forEach(ev => window.removeEventListener(ev, resetTimer));
+    };
+  }, [done, submitting, locking]);
 
   const showToast = (message: string, type: ToastType) => {
     setToast({ message, type, id: Date.now() });
@@ -267,6 +303,7 @@ export const WaitlistForm = () => {
 
       // Success — in-card success state handles UI, no toast needed
       setDone(true);
+      if (onSubmitted) onSubmitted();
 
     } catch {
       showToast("something went wrong. try again in a bit.", "error");
@@ -479,6 +516,8 @@ export const WaitlistForm = () => {
               >
                 {locking || submitting
                   ? "obviously locking you in..."
+                  : idleMessage
+                  ? idleMessage
                   : hovering
                   ? "go on — you know you want to."
                   : <>i'm in. obviously. <span>→</span></>}
