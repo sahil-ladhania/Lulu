@@ -287,30 +287,46 @@ export default function Home() {
 
 
       {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
-      <footer id="footer" className="relative z-10 px-12 py-4 flex flex-col items-center gap-2">
-        {/* Logo + wordmark — same row */}
-        <div className="flex items-center gap-2">
+      <footer id="footer" className="relative z-10 px-12 py-7 flex flex-row items-center justify-between gap-6">
+        {/* LEFT — Identity */}
+        <div className="flex-1 flex items-center gap-2 justify-start">
           <Logo
             variant="mark"
             color="marigold"
-            size={16}
-            style={{ opacity: 0.22 }}
+            size={20}
+            style={{ opacity: 0.5 }}
           />
           <div
-            className="font-display font-medium flex items-baseline text-lulu-cream/25"
-            style={{ fontSize: 15, letterSpacing: "-0.03em" }}
+            className="font-display font-medium flex items-baseline"
+            style={{ fontSize: 15, letterSpacing: "-0.03em", color: "rgba(245, 240, 230, 0.5)" }}
           >
             lulu
-            <div className="w-[3px] h-[3px] rounded-full bg-lulu-marigold/30 ml-[1.5px]" />
+            <div className="w-[3px] h-[3px] rounded-full bg-lulu-marigold ml-[1.5px]" />
           </div>
         </div>
-        {/* Copyright */}
-        <p
-          className="font-body text-lulu-cream/[0.15]"
-          style={{ fontSize: 11 }}
-        >
-          © 2025 lulu. all rights reserved.
-        </p>
+
+        {/* CENTER — Brand line */}
+        <div className="flex-1 text-center">
+          <p className="font-body" style={{ fontSize: 13, color: "rgba(245, 240, 230, 0.35)" }}>
+            lulu stays. that's the whole story.
+          </p>
+        </div>
+
+        {/* RIGHT — Social icons */}
+        <div className="flex-1 flex items-center gap-[18px] justify-end">
+          <a href="https://www.instagram.com/getluluapp/" target="_blank" rel="noopener noreferrer" aria-label="lulu on instagram" className="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="https://x.com/getluluapp" target="_blank" rel="noopener noreferrer" aria-label="lulu on twitter" className="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/company/getluluapp/" target="_blank" rel="noopener noreferrer" aria-label="lulu on linkedin" className="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <a href="mailto:getluluapp@gmail.com" aria-label="email lulu" className="social-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        </div>
       </footer>
       <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 768px) {
@@ -349,10 +365,24 @@ export default function Home() {
           }
           #footer { 
             flex-direction: column !important; 
-            gap: 8px !important; 
+            gap: 20px !important; 
+            padding: 24px 20px !important; 
             text-align: center !important; 
-            padding: 20px !important; 
           }
+          #footer > div {
+            flex: none !important;
+            width: 100% !important;
+            justify-content: center !important;
+          }
+        }
+        .social-icon {
+          color: #F5F0E6;
+          opacity: 0.3;
+          transition: all 0.4s ease;
+        }
+        .social-icon:hover {
+          opacity: 1;
+          color: #E89B23;
         }
       `}} />
     </motion.div>
