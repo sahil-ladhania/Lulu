@@ -76,7 +76,7 @@ export const SplashScreen = ({ onDone }: { onDone: () => void }) => {
               zIndex: 2,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "flex-start",
               gap: "8px",
             }}
           >
