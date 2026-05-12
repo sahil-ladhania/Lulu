@@ -110,40 +110,54 @@ export default function Home() {
       >
         <div className="lulu-voice annotation-1" style={{
           position: "fixed",
-          top: "48px",
-          left: "80px",
-          "--lulu-voice-size": "20px",
-          transform: "rotate(-3deg)",
+          top: "90px",
+          left: "45px",
+          "--lulu-voice-size": "22px",
+          transform: "rotate(-2deg)",
           color: "#3D2E1E",
-          opacity: 0.85,
+          opacity: 0.9,
+          display: "inline-block",
           zIndex: 50,
           pointerEvents: "none",
-          lineHeight: 1.5,
+          lineHeight: 1.6,
+          padding: "16px 20px",
           textAlign: "left"
         } as any}>
           that's me,<br />
           by the way.<br />
-          <span style={{ marginLeft: "14px" }}>Hi !</span>
-          <svg className="svg-arrow hide-mobile" style={{ position: "absolute", top: "8px", right: "-48px",
-            width: "44px", height: "32px", overflow: "visible" }}>
-            <path d="M 2 16 C 10 10 28 12 38 16" 
-              stroke="#3D2E1E" strokeWidth="1.5" 
-              fill="none" opacity="0.7"
-              strokeLinecap="round"/>
-            <path d="M 34 10 L 40 16 L 34 22" 
-              stroke="#3D2E1E" strokeWidth="1.5" 
-              fill="none" opacity="0.7"
-              strokeLinecap="round" strokeLinejoin="round"/>
+          <span style={{ marginLeft: "12px" }}>hi !</span>
+
+          {/* Imperfect circle around the text */}
+          <svg style={{ position: "absolute", top: "-8px", left: "-12px",
+            width: "160px", height: "110px", overflow: "visible" }}
+            viewBox="0 0 160 110" className="hide-mobile">
+            <path d="M 80 6 
+              C 115 2 148 18 152 45 
+              C 156 72 138 96 105 102 
+              C 72 108 24 98 10 72 
+              C -4 46 12 10 80 6 Z" 
+              stroke="#3D2E1E" strokeWidth="1.8" 
+              fill="none" opacity="0.3"
+              strokeLinecap="round"
+              strokeLinejoin="round"/>
           </svg>
-          <svg className="svg-circle hide-mobile" style={{ position: "absolute", top: "-8px", left: "-12px",
-            width: "120px", height: "90px", overflow: "visible" }}>
-            <path d="M 60 4 C 90 0 115 15 118 40 
-              C 121 65 105 82 75 85 
-              C 45 88 8 75 4 50 
-              C 0 25 20 6 60 4 Z" 
+
+          {/* Arrow points DOWN from wordmark into circle top */}
+          <svg style={{ position: "absolute",
+            top: "-64px", left: "20px",
+            width: "40px", height: "64px", overflow: "visible" }}
+            viewBox="0 0 40 64" className="hide-mobile">
+            {/* Curved tail starting near wordmark */}
+            <path d="M 32 4 C 30 20 25 35 12 56" 
               stroke="#3D2E1E" strokeWidth="1.5" 
-              fill="none" opacity="0.35"
+              fill="none" opacity="0.6"
               strokeLinecap="round"/>
+            {/* Arrowhead pointing down into circle top */}
+            <path d="M 4 48 L 10 60 L 22 52" 
+              stroke="#3D2E1E" strokeWidth="1.5" 
+              fill="none" opacity="0.6"
+              strokeLinecap="round" 
+              strokeLinejoin="round"/>
           </svg>
         </div>
 
@@ -342,6 +356,24 @@ export default function Home() {
               >
                 that's all we're saying for now.
               </motion.p>
+
+              <svg style={{
+                display: "block",
+                width: "60px",
+                height: "40px",
+                overflow: "visible",
+                marginLeft: "20px",
+                opacity: 0.5
+              }} viewBox="0 0 60 40" className="annotation-3-arrow hide-mobile">
+                <path d="M 4 4 C 20 4 40 20 52 34" 
+                  stroke="#3D2E1E" strokeWidth="1.5" 
+                  fill="none"
+                  strokeLinecap="round"/>
+                <path d="M 44 32 L 54 36 L 50 26" 
+                  stroke="#3D2E1E" strokeWidth="1.5" 
+                  fill="none"
+                  strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               
               <div className="lulu-voice annotation-3" style={{
                 marginTop: "20px",
@@ -540,19 +572,37 @@ export default function Home() {
             text-align: center !important; 
           }
           .annotation-1 {
-            top: 80px !important;
-            left: 16px !important;
-            --lulu-voice-size: 15px !important;
-            position: fixed !important;
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            margin: 100px 0 0 20px !important;
+            --lulu-voice-size: 16px !important;
+            padding: 0 !important;
+            transform: rotate(-2deg) !important;
           }
           .annotation-1 .hide-mobile {
             display: none !important;
           }
-          .annotation-2 {
-            display: none !important;
-          }
           .annotation-3 {
-            --lulu-voice-size: 18px !important;
+            --lulu-voice-size: 22px !important;
+            margin-left: 40px !important;
+          }
+          @media (min-width: 769px) and (max-width: 1024px) {
+            .annotation-3 {
+              margin-left: 20px !important;
+            }
+          }
+          @media (max-width: 768px) {
+            .annotation-2 {
+              display: none !important;
+            }
+            .annotation-3 {
+              margin-left: 0 !important;
+              --lulu-voice-size: 18px !important;
+            }
+            .annotation-3-arrow {
+              display: none !important;
+            }
           }
           .lulu-voice:not(.annotation-1) {
             position: relative !important;
