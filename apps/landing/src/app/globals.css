@@ -11,15 +11,17 @@
   --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui;
   --font-body: "Switzer", ui-sans-serif, system-ui;
   --font-sans: "Switzer", ui-sans-serif, system-ui;
+  --font-lulu-hand: var(--font-lulu-hand);
 
   /* Lulu Color Palette */
+  --color-lulu-marigold-light: #B8761A;
   --color-lulu-bg: #0F0D0B;
   --color-lulu-surface: #1C1916;
   --color-lulu-elevated: #2A2725;
   --color-lulu-cream: #F5F0E6;
-  --color-lulu-text-secondary: #A8A096;
-  --color-lulu-text-tertiary: #8A8174;
-  --color-lulu-text-quiet: #6B6359;
+  --color-lulu-text-secondary: #6B6359;
+  --color-lulu-text-tertiary: #4A4641;
+  --color-lulu-text-quiet: #8A8174;
   --color-lulu-border: #2A2725;
   --color-lulu-border-default: #4A4641;
   --color-lulu-marigold: #E89B23;
@@ -84,9 +86,28 @@
   }
 
   body {
-    background-color: #0F0D0B;
-    color: #F5F0E6;
+    background-color: #F5F0E6;
+    color: #0F0D0B;
     font-family: "Switzer", ui-sans-serif, system-ui;
     text-transform: lowercase;
+  }
+
+  .lulu-voice {
+    font-family: var(--font-lulu-hand);
+    color: #3D2E1E;
+    line-height: 1.4;
+    pointer-events: none;
+    display: block;
+    letter-spacing: 0.02em;
+    font-size: var(--lulu-voice-size);
+  }
+
+  @media (max-width: 768px) {
+    .lulu-voice {
+      font-size: calc(var(--lulu-voice-size) - 3px) !important;
+    }
+    .lulu-voice.hide-mobile {
+      display: none !important;
+    }
   }
 }

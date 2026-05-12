@@ -10,13 +10,14 @@
   --font-sans: var(--font-body);
 
   /* Colors */
+  --color-lulu-marigold-light: #B8761A;
   --color-lulu-bg: #0F0D0B;
   --color-lulu-surface: #1C1916;
   --color-lulu-elevated: #2A2725;
   --color-lulu-cream: #F5F0E6;
-  --color-lulu-text-secondary: #A8A096;
-  --color-lulu-text-tertiary: #8A8174;
-  --color-lulu-text-quiet: #6B6359;
+  --color-lulu-text-secondary: #6B6359;
+  --color-lulu-text-tertiary: #4A4641;
+  --color-lulu-text-quiet: #8A8174;
   --color-lulu-border: #2A2725;
   --color-lulu-border-default: #4A4641;
   --color-lulu-marigold: #E89B23;

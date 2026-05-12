@@ -20,11 +20,11 @@ const CITY_HINTS: Record<string, string> = {
 // ─── Input styles ─────────────────────────────────────────────────────────────
 const inputBase: React.CSSProperties = {
   padding: "13px 15px",
-  backgroundColor: "rgba(245,240,230,0.06)",
+  backgroundColor: "rgba(15, 13, 11, 0.04)",
   border: "none",
   borderRadius: 10,
   fontSize: 15,
-  color: "#F5F0E6",
+  color: "var(--color-lulu-bg)",
   outline: "none",
   boxShadow: "none",
   width: "100%",
@@ -32,10 +32,10 @@ const inputBase: React.CSSProperties = {
   fontFamily: "'Switzer', sans-serif",
 };
 const inputFocus: React.CSSProperties = {
-  backgroundColor: "rgba(245,240,230,0.10)",
+  backgroundColor: "rgba(15, 13, 11, 0.07)",
 };
 // inputError removed — validation uses quirky placeholders instead
-const placeholderColor = "rgba(245,240,230,0.25)";
+const placeholderColor = "rgba(15, 13, 11, 0.25)";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -51,7 +51,7 @@ const Chevron = ({ open }: { open: boolean }) => (
   >
     <path
       d="M1 1L5 5L9 1"
-      stroke="rgba(245,240,230,0.3)"
+      stroke="rgba(15, 13, 11, 0.3)"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -99,10 +99,10 @@ const CityDropdown = ({
         <span
           style={{
             color: value
-              ? "#F5F0E6"
+              ? "var(--color-lulu-bg)"
               : showQuirky
-              ? "rgba(232,155,35,0.7)"
-              : "rgba(245,240,230,0.25)",
+              ? "rgba(184,118,26,0.7)"
+              : "rgba(15, 13, 11, 0.25)",
           }}
         >
           {value || (showQuirky ? "pick a city. any city." : "select your city")}
@@ -121,9 +121,9 @@ const CityDropdown = ({
             className="absolute left-0 right-0 top-[calc(100%+6px)] rounded-[10px] z-50 py-1 overflow-hidden"
             style={{
               transformOrigin: "top",
-              backgroundColor: "#1C1916",
-              border: "1px solid rgba(245,240,230,0.08)",
-              boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
+              backgroundColor: "#F5F0E6",
+              border: "1px solid rgba(15, 13, 11, 0.08)",
+              boxShadow: "0 16px 40px rgba(15, 13, 11, 0.08)",
             } as React.CSSProperties}
           >
             {CITIES.map((city) => {
@@ -138,7 +138,7 @@ const CityDropdown = ({
                   }}
                   className="w-full flex items-center justify-between font-body text-[15px] px-4 py-[13px] transition-all duration-150 cursor-pointer"
                   style={{
-                    color: isSelected ? "#E89B23" : "rgba(245,240,230,0.75)",
+                    color: isSelected ? "var(--color-lulu-marigold-light)" : "rgba(15, 13, 11, 0.75)",
                     backgroundColor: "transparent",
                     border: "none",
                     textAlign: "left",
@@ -146,18 +146,18 @@ const CityDropdown = ({
                   }}
                   onMouseEnter={(e) => {
                     const target = e.currentTarget as HTMLButtonElement;
-                    target.style.backgroundColor = "rgba(245,240,230,0.06)";
-                    target.style.color = "#E89B23";
+                    target.style.backgroundColor = "rgba(15, 13, 11, 0.06)";
+                    target.style.color = "var(--color-lulu-marigold-light)";
                   }}
                   onMouseLeave={(e) => {
                     const target = e.currentTarget as HTMLButtonElement;
                     target.style.backgroundColor = "transparent";
-                    target.style.color = isSelected ? "#E89B23" : "rgba(245,240,230,0.75)";
+                    target.style.color = isSelected ? "var(--color-lulu-marigold-light)" : "rgba(15, 13, 11, 0.75)";
                   }}
                 >
                   <span>{city}</span>
                   {isSelected && (
-                    <div className="w-[5px] h-[5px] bg-lulu-marigold" style={{ borderRadius: "50%" }} />
+                    <div className="w-[5px] h-[5px]" style={{ borderRadius: "50%", background: "#B8761A" }} />
                   )}
                 </button>
               );
@@ -183,7 +183,7 @@ const Field = ({
     <label
       htmlFor={id}
       className="font-body font-medium text-[11px] uppercase tracking-[0.14em] px-1"
-      style={{ color: "rgba(245,240,230,0.35)" }}
+      style={{ color: "rgba(15, 13, 11, 0.35)" }}
     >
       {label}
     </label>
@@ -331,13 +331,13 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
           style={{ width: "52px", height: "52px", objectFit: "contain", marginBottom: "24px" }} 
         />
         <h3
-          className="font-display font-medium text-lulu-cream mb-3"
+          className="font-display font-medium text-lulu-bg mb-3"
           style={{ fontSize: 28, letterSpacing: "-0.03em", lineHeight: 1.25 }}
         >
           lulu, meet {firstName}.<br />
           {firstName}, meet lulu.
         </h3>
-        <p className="font-body text-[14px]" style={{ color: "rgba(245,240,230,0.38)" }}>
+        <p className="font-body text-[14px]" style={{ color: "rgba(15, 13, 11, 0.45)" }}>
           until then — tell someone interesting about us.
         </p>
       </motion.div>
@@ -350,8 +350,8 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
       {/* Placeholder color via a global style tag */}
       <style>{`
         .lulu-input::placeholder { color: ${placeholderColor}; }
-        .lulu-input-quirky::placeholder { color: rgba(232,155,35,0.7) !important; }
-        .lulu-input { caret-color: #E89B23; }
+        .lulu-input-quirky::placeholder { color: rgba(184, 118, 26, 0.7) !important; }
+        .lulu-input { caret-color: var(--color-lulu-marigold-light); }
         .lulu-input:focus,
         .lulu-input:focus-visible,
         .lulu-input:focus-within {
@@ -369,18 +369,18 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
 
       {/* Card header */}
       <div className="flex flex-col items-center text-center mb-5">
-        <span className="font-body font-medium text-[11px] uppercase tracking-[0.20em] text-lulu-marigold/75 mb-4">
+        <span className="font-body font-medium text-[11px] uppercase tracking-[0.20em] text-lulu-marigold-light mb-4">
           you're early.
         </span>
         <h2
-          className="font-display font-medium text-lulu-cream leading-tight mb-3"
+          className="font-display font-medium text-lulu-bg leading-tight mb-3"
           style={{ fontSize: 34, letterSpacing: "-0.03em" }}
         >
           be first.
         </h2>
         <p
           className="font-body text-[14px] leading-relaxed"
-          style={{ color: "rgba(245,240,230,0.38)" }}
+          style={{ color: "rgba(15, 13, 11, 0.45)" }}
         >
           we're launching city by city. be the first to know when lulu hits yours.
         </p>
@@ -420,7 +420,7 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="font-body"
-                style={{ fontSize: 12, fontStyle: "italic", color: "#E89B23", paddingLeft: 2 }}
+                style={{ fontSize: 12, fontStyle: "italic", color: "var(--color-lulu-marigold-light)", opacity: 0.7, paddingLeft: 2 }}
               >
                 what your future match will know you as.
               </motion.p>
@@ -461,7 +461,7 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="font-body"
-                style={{ fontSize: 12, fontStyle: "italic", color: "#E89B23", paddingLeft: 2 }}
+                style={{ fontSize: 12, fontStyle: "italic", color: "var(--color-lulu-marigold-light)", opacity: 0.7, paddingLeft: 2 }}
               >
                 got it. this stays between us.
               </motion.p>
@@ -490,7 +490,7 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="font-body"
-                style={{ fontSize: 12, fontStyle: "italic", color: "#E89B23", paddingLeft: 2 }}
+                style={{ fontSize: 12, fontStyle: "italic", color: "var(--color-lulu-marigold-light)", opacity: 0.7, paddingLeft: 2 }}
               >
                 {CITY_HINTS[city]}
               </motion.p>
@@ -504,18 +504,18 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
           disabled={submitting || locking}
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}
-          whileHover={{ y: -1, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 24px rgba(232,155,35,0.45)" }}
-          whileTap={{ y: 1, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(232,155,35,0.25)" }}
+          whileHover={{ y: -1, boxShadow: "0 6px 24px rgba(184,118,26,0.4)" }}
+          whileTap={{ y: 1, boxShadow: "0 2px 8px rgba(184,118,26,0.2)" }}
           className="relative w-full mt-2 overflow-hidden font-display font-medium rounded-[10px] disabled:opacity-60"
           style={{
             fontSize: 17,
             padding: "15px",
-            background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 70%), #E89B23",
-            color: "#0F0D0B",
+            background: "#B8761A",
+            color: "#F5F0E6",
             letterSpacing: "-0.03em",
             border: "none",
             cursor: submitting || locking ? "not-allowed" : "pointer",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 16px rgba(232,155,35,0.3)",
+            boxShadow: "0 4px 16px rgba(184,118,26,0.3)",
           }}
         >
           <span className="relative z-10 flex items-center justify-center gap-2 h-[24px]">
@@ -541,12 +541,26 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
         </motion.button>
 
         {/* Legal */}
-        <p
-          className="font-body text-center mt-1"
-          style={{ fontSize: 12, color: "rgba(245,240,230,0.22)" }}
+        <div 
+          className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mt-1"
         >
-          one email. when your city goes live. that's it.
-        </p>
+          <p
+            className="font-body text-center"
+            style={{ fontSize: 12, color: "rgba(15, 13, 11, 0.3)" }}
+          >
+            one email. when your city goes live. that's it.
+          </p>
+          <span className="lulu-voice" style={{
+            "--lulu-voice-size": "24px",
+            transform: "rotate(-2deg)",
+            color: "#3D2E1E",
+            opacity: 0.85,
+            display: "inline-block",
+            flexShrink: 0,
+          } as any}>
+            promise.
+          </span>
+        </div>
       </form>
 
       {/* Toast */}

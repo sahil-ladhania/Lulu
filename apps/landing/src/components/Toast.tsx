@@ -42,18 +42,17 @@ export const Toast = ({ message, type, id, onDismiss }: ToastProps) => {
           alignItems: "center",
           gap: 8,
           padding: "12px 20px",
-          backgroundColor: "rgba(15,13,11,0.95)",
+          backgroundColor: "rgba(245, 240, 230, 0.95)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          border: isError
-            ? "1px solid rgba(226,75,74,0.25)"
-            : "1px solid rgba(245,240,230,0.10)",
-          borderRadius: 100,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+          border: "1px solid rgba(15, 13, 11, 0.08)",
+          borderLeft: isError ? "4px solid rgba(226, 75, 74, 0.45)" : "4px solid var(--color-lulu-marigold-light)",
+          borderRadius: "12px",
+          boxShadow: "0 8px 32px rgba(15, 13, 11, 0.08)",
           fontFamily: "'Switzer', sans-serif",
           fontWeight: 400,
           fontSize: 13,
-          color: "rgba(245,240,230,0.85)",
+          color: "var(--color-lulu-bg)",
           letterSpacing: "0.01em",
         } as React.CSSProperties}
       >

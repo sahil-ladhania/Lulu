@@ -1,7 +1,15 @@
-import type { Metadata } from "next";
+import { Reenie_Beanie } from 'next/font/google'
 import "./globals.css";
 
+const reenieBeanie = Reenie_Beanie({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-lulu-hand',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
+// ... existing metadata ...
   title: "lulu. — match deeper, reveal later.",
   description: "coming soon. be first.",
   icons: {
@@ -39,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="antialiased">
-      <body>{children}</body>
+      <body className={reenieBeanie.variable}>{children}</body>
     </html>
   );
 }
