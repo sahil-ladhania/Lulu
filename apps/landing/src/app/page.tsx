@@ -124,7 +124,7 @@ export default function Home() {
           that's me,<br />
           by the way.<br />
           <span style={{ marginLeft: "14px" }}>Hi !</span>
-          <svg style={{ position: "absolute", top: "8px", right: "-48px",
+          <svg className="svg-arrow hide-mobile" style={{ position: "absolute", top: "8px", right: "-48px",
             width: "44px", height: "32px", overflow: "visible" }}>
             <path d="M 2 16 C 10 10 28 12 38 16" 
               stroke="#3D2E1E" strokeWidth="1.5" 
@@ -135,7 +135,7 @@ export default function Home() {
               fill="none" opacity="0.7"
               strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <svg className="svg-circle" style={{ position: "absolute", top: "-8px", left: "-12px",
+          <svg className="svg-circle hide-mobile" style={{ position: "absolute", top: "-8px", left: "-12px",
             width: "120px", height: "90px", overflow: "visible" }}>
             <path d="M 60 4 C 90 0 115 15 118 40 
               C 121 65 105 82 75 85 
@@ -223,6 +223,19 @@ export default function Home() {
                 >
                   {taglineText}
                 </motion.p>
+                <div className="lulu-voice lulu-mobile-only" style={{
+                  fontSize: "17px",
+                  transform: "rotate(-1.5deg)",
+                  color: "#3D2E1E",
+                  opacity: 0.8,
+                  marginTop: "12px",
+                  textAlign: "center",
+                  lineHeight: 1.6
+                }}>
+                  there's a form<br />
+                  down there,<br />
+                  don't be scared.
+                </div>
               </AnimatePresence>
             </motion.div>
           </div>
@@ -485,6 +498,7 @@ export default function Home() {
             padding: 24px 32px !important;
           }
         }
+        .lulu-mobile-only { display: none; }
         @media (max-width: 768px) {
           #nav { padding: 20px !important; }
           #hero-section { 
@@ -526,11 +540,12 @@ export default function Home() {
             text-align: center !important; 
           }
           .annotation-1 {
-            top: 16px !important;
+            top: 80px !important;
             left: 16px !important;
-            --lulu-voice-size: 16px !important;
+            --lulu-voice-size: 15px !important;
+            position: fixed !important;
           }
-          .annotation-1 .svg-circle {
+          .annotation-1 .hide-mobile {
             display: none !important;
           }
           .annotation-2 {
@@ -538,6 +553,17 @@ export default function Home() {
           }
           .annotation-3 {
             --lulu-voice-size: 18px !important;
+          }
+          .lulu-voice:not(.annotation-1) {
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            transform: rotate(-1.5deg) !important;
+          }
+          .lulu-mobile-only {
+            display: block !important;
           }
           #footer > div {
             flex: none !important;
