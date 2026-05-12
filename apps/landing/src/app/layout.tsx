@@ -47,6 +47,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="antialiased">
+      <head>
+        <link rel="preload" as="image" href="/splash-bg.jpg" />
+      </head>
       <body className={reenieBeanie.variable}>{children}</body>
     </html>
   );

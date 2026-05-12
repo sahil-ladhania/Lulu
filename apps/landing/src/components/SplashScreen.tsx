@@ -6,24 +6,49 @@ import { Logo } from "@lulu/ui/components";
 
 export const SplashScreen = ({ onDone }: { onDone: () => void }) => {
   const [visible, setVisible] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-      // give the exit animation time to finish, then tell parent
-      setTimeout(onDone, 700);
-    }, 4000);
+    let timer: NodeJS.Timeout;
+    
+    const startExitTimer = () => {
+      timer = setTimeout(() => {
+        setVisible(false);
+        setTimeout(onDone, 700);
+      }, 4000);
+    };
+
+    // Preload the image and wait for it
+    const img = new Image();
+    img.src = "/splash-bg.jpg";
+    
+    const handleLoad = () => {
+      setImageLoaded(true);
+      startExitTimer();
+    };
+
+    // If image loads or fails, start timer
+    img.onload = handleLoad;
+    img.onerror = handleLoad;
+
+    // Fallback: start timer anyway after 6 seconds
+    const fallbackTimer = setTimeout(() => {
+      if (!imageLoaded) {
+        handleLoad();
+      }
+    }, 6000);
 
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
     return () => {
-      clearTimeout(timer);
+      if (timer) clearTimeout(timer);
+      clearTimeout(fallbackTimer);
       window.removeEventListener("resize", checkMobile);
     };
-  }, [onDone]);
+  }, [onDone, imageLoaded]);
 
   return (
     <AnimatePresence>
@@ -42,6 +67,7 @@ export const SplashScreen = ({ onDone }: { onDone: () => void }) => {
             width: "100vw",
             height: "100vh",
             zIndex: 9999,
+            backgroundColor: "#0F0D0B",
             backgroundImage: "url('/splash-bg.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center center",
