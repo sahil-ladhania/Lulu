@@ -48,6 +48,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased">
       <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700&f[]=switzer@400,500,600&display=swap" rel="stylesheet" crossOrigin="anonymous" />
         <link rel="preload" as="image" href="/splash-bg.jpg" />
       </head>
       <body className={reenieBeanie.variable}>{children}</body>

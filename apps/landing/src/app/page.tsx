@@ -130,7 +130,7 @@ export default function Home() {
           {/* Imperfect circle around the text */}
           <svg style={{ position: "absolute", top: "-8px", left: "-12px",
             width: "160px", height: "110px", overflow: "visible" }}
-            viewBox="0 0 160 110" className="hide-mobile">
+            viewBox="0 0 160 110" className="annotation-1-circle">
             <path d="M 80 6 
               C 115 2 148 18 152 45 
               C 156 72 138 96 105 102 
@@ -146,7 +146,7 @@ export default function Home() {
           <svg style={{ position: "absolute",
             top: "-64px", left: "20px",
             width: "40px", height: "64px", overflow: "visible" }}
-            viewBox="0 0 40 64" className="hide-mobile">
+            viewBox="0 0 40 64" className="annotation-1-arrow">
             {/* Curved tail starting 12-15px below wordmark */}
             <path d="M 32 18 C 30 28 25 40 12 56" 
               stroke="#3D2E1E" strokeWidth="1.5" 
@@ -242,13 +242,44 @@ export default function Home() {
                   transform: "rotate(-1.5deg)",
                   color: "#3D2E1E",
                   opacity: 0.8,
-                  marginTop: "12px",
+                  marginTop: "16px",
                   textAlign: "center",
-                  lineHeight: 1.6
+                  lineHeight: 1.6,
+                  position: "relative",
+                  padding: "16px 28px",
+                  display: "inline-block"
                 }}>
                   there's a form<br />
                   down there,<br />
                   don't be scared.
+
+                  {/* Imperfect circle around the text */}
+                  <svg style={{ position: "absolute", top: "0px", left: "50%", transform: "translateX(-50%)",
+                    width: "200px", height: "100px", overflow: "visible" }}
+                    viewBox="0 0 200 100">
+                    <path d="M 100 5 
+                      C 150 2 195 20 192 50 
+                      C 189 80 150 95 100 95 
+                      C 50 95 10 80 8 50 
+                      C 6 20 50 8 100 5 Z" 
+                      stroke="#3D2E1E" strokeWidth="1.5" 
+                      fill="none" opacity="0.3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"/>
+                  </svg>
+
+                  {/* Arrow pointing DOWN below the circle */}
+                  <svg style={{ position: "absolute", bottom: "-55px", left: "50%", transform: "translateX(-50%)",
+                    width: "40px", height: "50px", overflow: "visible" }}>
+                    <path d="M 20 0 C 25 15 25 35 20 48" 
+                      stroke="#3D2E1E" strokeWidth="1.5" 
+                      fill="none" opacity="0.6"
+                      strokeLinecap="round"/>
+                    <path d="M 12 38 L 20 48 L 28 38" 
+                      stroke="#3D2E1E" strokeWidth="1.5" 
+                      fill="none" opacity="0.6"
+                      strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </AnimatePresence>
             </motion.div>
@@ -364,7 +395,7 @@ export default function Home() {
                 overflow: "visible",
                 marginLeft: "20px",
                 opacity: 0.5
-              }} viewBox="0 0 60 40" className="annotation-3-arrow hide-mobile">
+              }} viewBox="0 0 60 40" className="annotation-3-arrow">
                 <path d="M 4 4 C 20 4 40 20 52 34" 
                   stroke="#3D2E1E" strokeWidth="1.5" 
                   fill="none"
@@ -387,17 +418,15 @@ export default function Home() {
                 textAlign: "left"
               } as any}>
                 i know more.<br />
-                <span style={{ marginLeft: "20px" }}>
-                  i am not
-                </span><br />
                 <span style={{ marginLeft: "8px" }}>
-                  allowed to
+                  i am not allowed
                 </span><br />
                 <span style={{ marginLeft: "24px" }}>
-                  say yet.
+                  to say yet.
                 </span>
                 <svg style={{ position: "absolute", top: "-16px", left: "-20px",
-                  width: "200px", height: "160px", overflow: "visible" }}>
+                  width: "200px", height: "160px", overflow: "visible" }}
+                  viewBox="0 0 200 160" className="annotation-3-circle">
                   <path d="M 100 8 C 150 2 188 28 192 70 
                     C 196 112 168 148 120 154 
                     C 72 160 18 138 8 96 
@@ -552,7 +581,7 @@ export default function Home() {
           #intrigue-col { 
             flex: 0 0 100% !important; 
             max-width: 100% !important; 
-            text-align: center !important; 
+            text-align: left !important; 
           }
           #punchline { 
             white-space: normal !important; 
@@ -572,13 +601,27 @@ export default function Home() {
             text-align: center !important; 
           }
           .annotation-1 {
-            position: absolute !important;
-            top: 100px !important;
-            left: 20px !important;
-            margin: 0 !important;
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            margin: 80px 0 0 16px !important;
             --lulu-voice-size: 16px !important;
-            padding: 0 !important;
+            padding: 10px !important;
             transform: rotate(-2deg) !important;
+            display: inline-block !important;
+            width: fit-content !important;
+          }
+          .annotation-1-circle {
+            width: 120px !important;
+            height: 85px !important;
+            top: -4px !important;
+            left: -6px !important;
+          }
+          .annotation-1-arrow {
+            width: 30px !important;
+            height: 48px !important;
+            top: -48px !important;
+            left: 15px !important;
           }
           .annotation-1 .hide-mobile {
             display: none !important;
@@ -597,14 +640,23 @@ export default function Home() {
               display: none !important;
             }
             .annotation-3 {
-              margin-left: 0 !important;
+              margin-left: 20px !important;
               --lulu-voice-size: 18px !important;
             }
+            .annotation-3-circle {
+              width: 180px !important;
+              height: 130px !important;
+              top: -12px !important;
+              left: -16px !important;
+            }
             .annotation-3-arrow {
-              display: none !important;
+              width: 40px !important;
+              height: 28px !important;
+              margin-left: 30px !important;
+              opacity: 0.6 !important;
             }
             #hero-section {
-              min-height: 100vh !important;
+              min-height: calc(100vh - 150px) !important;
               padding-top: 0 !important;
               display: flex !important;
               justify-content: center !important;
@@ -633,13 +685,18 @@ export default function Home() {
             bottom: auto !important;
             transform: rotate(-1.5deg) !important;
           }
-          .lulu-mobile-only {
-            display: block !important;
-          }
           #footer > div {
             flex: none !important;
             width: 100% !important;
             justify-content: center !important;
+          }
+        }
+        .lulu-mobile-only {
+          display: none !important;
+        }
+        @media (max-width: 768px) {
+          .lulu-mobile-only {
+            display: inline-block !important;
           }
         }
         .social-icon {
