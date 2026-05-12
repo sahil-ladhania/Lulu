@@ -35,16 +35,23 @@ export const SplashScreen = ({ onDone }: { onDone: () => void }) => {
           transition={{ duration: 0.7, ease: "easeInOut" }}
           style={{
             position: "fixed",
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
             zIndex: 9999,
             backgroundImage: "url('/splash-bg.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
+            backgroundAttachment: "scroll",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            overflow: "hidden"
           }}
         >
           {/* Frosted Glass Overlay */}

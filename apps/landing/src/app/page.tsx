@@ -188,7 +188,7 @@ export default function Home() {
         </nav>
 
         {/* ── SECTION 1 — HERO ────────────────────────────────────────────────── */}
-        <section id="hero-section" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-28 pb-[60px] z-[1]">
+        <section id="hero-section" className="relative min-h-screen flex flex-col items-center justify-center px-6 md:pt-28 pb-[60px] z-[1]">
 
           {/* Hero content */}
           <div className="relative z-10 flex flex-col items-center text-center max-w-[700px] w-full gap-7">
@@ -572,10 +572,10 @@ export default function Home() {
             text-align: center !important; 
           }
           .annotation-1 {
-            position: relative !important;
-            top: auto !important;
-            left: auto !important;
-            margin: 100px 0 0 20px !important;
+            position: absolute !important;
+            top: 100px !important;
+            left: 20px !important;
+            margin: 0 !important;
             --lulu-voice-size: 16px !important;
             padding: 0 !important;
             transform: rotate(-2deg) !important;
@@ -602,6 +602,13 @@ export default function Home() {
             }
             .annotation-3-arrow {
               display: none !important;
+            }
+            #hero-section {
+              min-height: 100vh !important;
+              padding-top: 0 !important;
+              display: flex !important;
+              justify-content: center !important;
+              align-items: center !important;
             }
           }
           .lulu-voice:not(.annotation-1) {
