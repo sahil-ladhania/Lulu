@@ -91,9 +91,8 @@ const CityDropdown = ({
         className="w-full flex items-center justify-between font-body rounded-[10px] cursor-pointer"
         style={{
           ...inputBase,
+          ...(open ? inputFocus : {}),
           textAlign: "left",
-          color: "#F5F0E6",
-          backgroundColor: "rgba(245,240,230,0.06)",
         }}
       >
         <span

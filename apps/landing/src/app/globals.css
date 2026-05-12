@@ -100,6 +100,8 @@
     display: block;
     letter-spacing: 0.02em;
     font-size: var(--lulu-voice-size);
+    -webkit-text-stroke: 0.4px #3D2E1E;
+    text-shadow: 0.3px 0.3px 0 rgba(61, 46, 30, 0.3);
   }
 
   @media (max-width: 768px) {

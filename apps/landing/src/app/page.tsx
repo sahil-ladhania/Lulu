@@ -147,8 +147,8 @@ export default function Home() {
             top: "-64px", left: "20px",
             width: "40px", height: "64px", overflow: "visible" }}
             viewBox="0 0 40 64" className="hide-mobile">
-            {/* Curved tail starting near wordmark */}
-            <path d="M 32 4 C 30 20 25 35 12 56" 
+            {/* Curved tail starting 12-15px below wordmark */}
+            <path d="M 32 18 C 30 28 25 40 12 56" 
               stroke="#3D2E1E" strokeWidth="1.5" 
               fill="none" opacity="0.6"
               strokeLinecap="round"/>
