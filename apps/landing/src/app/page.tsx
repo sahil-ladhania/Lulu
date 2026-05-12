@@ -611,6 +611,20 @@ export default function Home() {
               align-items: center !important;
             }
           }
+          @media (min-width: 769px) and (max-width: 900px) {
+            #split-container {
+              padding: 40px 32px !important;
+              gap: 40px !important;
+            }
+            #intrigue-col {
+              flex: 0 0 52% !important;
+              max-width: 52% !important;
+            }
+            #form-col {
+              flex: 0 0 44% !important;
+              max-width: 44% !important;
+            }
+          }
           .lulu-voice:not(.annotation-1) {
             position: relative !important;
             top: auto !important;
