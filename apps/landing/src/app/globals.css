@@ -6,9 +6,9 @@
 
 @theme inline {
   /* Fonts */
-  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui;
-  --font-body: "Switzer", ui-sans-serif, system-ui;
-  --font-sans: "Switzer", ui-sans-serif, system-ui;
+  --font-display: var(--font-cabinet-grotesk), ui-sans-serif, system-ui;
+  --font-body: var(--font-switzer), ui-sans-serif, system-ui;
+  --font-sans: var(--font-switzer), ui-sans-serif, system-ui;
   --font-lulu-hand: var(--font-lulu-hand);
 
   /* Lulu Color Palette */
@@ -86,7 +86,7 @@
   body {
     background-color: #F5F0E6;
     color: #0F0D0B;
-    font-family: "Switzer", ui-sans-serif, system-ui;
+    font-family: var(--font-switzer), ui-sans-serif, system-ui;
     text-transform: lowercase;
   }
 
