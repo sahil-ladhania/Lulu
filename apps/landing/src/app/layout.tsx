@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Reenie_Beanie } from 'next/font/google'
 import "./globals.css";
 
@@ -9,7 +10,6 @@ const reenieBeanie = Reenie_Beanie({
 })
 
 export const metadata: Metadata = {
-// ... existing metadata ...
   title: "lulu. — match deeper, reveal later.",
   description: "coming soon. be first.",
   icons: {
