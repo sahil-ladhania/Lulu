@@ -4,6 +4,7 @@ import { useState, FormEvent, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toast, ToastType } from "@/components/Toast";
 import { ProofCounter } from "./ProofCounter";
+import { HandwrittenAnnotation } from "./HandwrittenAnnotation";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -200,7 +201,7 @@ const Field = ({
 );
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
+export const WaitlistForm = ({ onSubmitted, isFormCardComplete }: { onSubmitted?: () => void; isFormCardComplete?: boolean }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
@@ -595,16 +596,19 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
           >
             one email. when your city goes live. that's it.
           </p>
-          <span className="lulu-voice" style={{
-            "--lulu-voice-size": "24px",
-            transform: "rotate(-2deg)",
-            color: "#3D2E1E",
-            opacity: 0.85,
-            display: "inline-block",
-            flexShrink: 0,
-          } as any}>
-            promise.
-          </span>
+          <HandwrittenAnnotation
+            isActive={!!isFormCardComplete}
+            textChunks={[{ content: "promise." }]}
+            className="lulu-voice"
+            style={{
+              "--lulu-voice-size": "24px",
+              transform: "rotate(-2deg)",
+              color: "#3D2E1E",
+              opacity: 0.85,
+              display: "inline-block",
+              flexShrink: 0,
+            } as any}
+          />
         </div>
       </form>
 

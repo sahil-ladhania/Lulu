@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Logo } from "@lulu/ui/components";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { SplashScreen } from "@/components/SplashScreen";
 import { AtmosphereLayers } from "@/components/AtmosphereLayers";
+import { HandwrittenAnnotation } from "@/components/HandwrittenAnnotation";
 
 // ─── Animation constants ──────────────────────────────────────────────────────
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -43,9 +44,15 @@ const revealChild = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [splashDone, setSplashDone] = useState(false);
+  const [splashComplete, setSplashComplete] = useState(false);
+  const [section2InView, setSection2InView] = useState(false);
+  const [formCardAnimationComplete, setFormCardAnimationComplete] = useState(false);
   const [taglineText, setTaglineText] = useState("match deeper, reveal later.");
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [scrolledPast, setScrolledPast] = useState(false);
   const hasTriggeredTagline = useRef(false);
+  
+  const prefersReducedMotion = useReducedMotion();
 
   // Easter Egg 1: Tab Title
   useEffect(() => {
@@ -59,6 +66,17 @@ export default function Home() {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
+
+  // Scroll Cue Listener
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50 && !scrolledPast) {
+        setScrolledPast(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrolledPast]);
 
   // Easter Egg 2: Idle Tagline
   useEffect(() => {
@@ -99,7 +117,7 @@ export default function Home() {
 
   return (
     <>
-      <SplashScreen onDone={() => setSplashDone(true)} />
+      <SplashScreen onDone={() => { setSplashDone(true); setSplashComplete(true); }} />
 
       {/* Main content — fades in as splash fades out */}
       <motion.div
@@ -111,58 +129,54 @@ export default function Home() {
       >
         <AtmosphereLayers />
         <div className="relative z-10">
-          <div className="lulu-voice annotation-1" style={{
-          position: "fixed",
-          top: "90px",
-          left: "45px",
-          "--lulu-voice-size": "22px",
-          transform: "rotate(-2deg)",
-          color: "#3D2E1E",
-          opacity: 0.9,
-          display: "inline-block",
-          zIndex: 50,
-          pointerEvents: "none",
-          lineHeight: 1.6,
-          padding: "16px 20px",
-          textAlign: "left"
-        } as any}>
-          that's me,<br />
-          by the way.<br />
-          <span style={{ marginLeft: "12px" }}>hi !</span>
-
-          {/* Imperfect circle around the text */}
-          <svg style={{ position: "absolute", top: "-8px", left: "-12px",
-            width: "160px", height: "110px", overflow: "visible" }}
-            viewBox="0 0 160 110" className="annotation-1-circle">
-            <path d="M 80 6 
-              C 115 2 148 18 152 45 
-              C 156 72 138 96 105 102 
-              C 72 108 24 98 10 72 
-              C -4 46 12 10 80 6 Z" 
-              stroke="#3D2E1E" strokeWidth="1.8" 
-              fill="none" opacity="0.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"/>
-          </svg>
-
-          {/* Arrow points DOWN from wordmark into circle top */}
-          <svg style={{ position: "absolute",
-            top: "-64px", left: "20px",
-            width: "40px", height: "64px", overflow: "visible" }}
-            viewBox="0 0 40 64" className="annotation-1-arrow">
-            {/* Curved tail starting 12-15px below wordmark */}
-            <path d="M 32 18 C 30 28 25 40 12 56" 
-              stroke="#3D2E1E" strokeWidth="1.5" 
-              fill="none" opacity="0.6"
-              strokeLinecap="round"/>
-            {/* Arrowhead pointing down into circle top */}
-            <path d="M 4 48 L 10 60 L 22 52" 
-              stroke="#3D2E1E" strokeWidth="1.5" 
-              fill="none" opacity="0.6"
-              strokeLinecap="round" 
-              strokeLinejoin="round"/>
-          </svg>
-        </div>
+          <HandwrittenAnnotation
+            isActive={splashComplete}
+            baseDelay={0.65}
+            className="lulu-voice annotation-1"
+            style={{
+              position: "fixed",
+              top: "90px",
+              left: "45px",
+              "--lulu-voice-size": "22px",
+              transform: "rotate(-2deg)",
+              color: "#3D2E1E",
+              display: "inline-block",
+              zIndex: 50,
+              pointerEvents: "none",
+              lineHeight: 1.6,
+              padding: "16px 20px",
+              textAlign: "left",
+              opacity: 0.9,
+            } as any}
+            textChunks={[
+              { content: "that's me,", breakAfter: true },
+              { content: "by the way.", breakAfter: true },
+              { content: "hi !", marginLeft: "12px" }
+            ]}
+            svgs={[
+              {
+                props: {
+                  className: "annotation-1-circle",
+                  style: { position: "absolute", top: "-8px", left: "-12px", width: "160px", height: "110px", overflow: "visible" },
+                  viewBox: "0 0 160 110"
+                },
+                paths: [
+                  { d: "M 80 6 C 115 2 148 18 152 45 C 156 72 138 96 105 102 C 72 108 24 98 10 72 C -4 46 12 10 80 6 Z", strokeWidth: "1.8", opacity: "0.3" }
+                ]
+              },
+              {
+                props: {
+                  className: "annotation-1-arrow",
+                  style: { position: "absolute", top: "-64px", left: "20px", width: "40px", height: "64px", overflow: "visible" },
+                  viewBox: "0 0 40 64"
+                },
+                paths: [
+                  { d: "M 32 18 C 30 28 25 40 12 56", strokeWidth: "1.5", opacity: "0.6" },
+                  { d: "M 4 48 L 10 60 L 22 52", strokeWidth: "1.5", opacity: "0.6" }
+                ]
+              }
+            ]}
+          />
 
         {/* ── NAV ────────────────────────────────────────────────────────────── */}
         <nav id="nav" className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-7 pointer-events-none flex items-center">
@@ -197,9 +211,9 @@ export default function Home() {
           <div className="relative z-10 flex flex-col items-center text-center max-w-[700px] w-full gap-7">
             {/* Eyebrow */}
             <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease, delay: 0.15 }}
+              initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+              animate={prefersReducedMotion || splashComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+              transition={{ duration: 0.4, ease, delay: 0 }}
               className="inline-flex items-center gap-2"
             >
               <div className="pulse-dot w-[7px] h-[7px]" style={{ borderRadius: "50%", background: "var(--color-lulu-marigold-light)" }} />
@@ -213,9 +227,9 @@ export default function Home() {
 
             {/* Headline */}
             <motion.h1
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease, delay: 0.35 }}
+              initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+              animate={prefersReducedMotion || splashComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+              transition={{ duration: 0.6, ease, delay: 0.15 }}
               id="hero-headline"
               className="font-display font-medium text-lulu-bg"
               style={{ fontSize: "clamp(36px, 5.5vw, 68px)", lineHeight: 1.00, letterSpacing: "-0.04em" }}
@@ -224,125 +238,124 @@ export default function Home() {
             </motion.h1>
 
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease, delay: 0.6 }}
+              initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              animate={prefersReducedMotion || splashComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.5, ease, delay: 0.4 }}
               className="h-[24px]"
             >
-            <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait">
                 <motion.p
                   key={taglineText}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.45 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
+                  transition={{ duration: 0.2 }}
                   className="font-body text-[17px] text-lulu-bg tracking-[-0.01em]"
                 >
                   {taglineText}
                 </motion.p>
-                <div className="lulu-voice lulu-mobile-only" style={{
+              </AnimatePresence>
+
+              {/* Mobile annotation outside AnimatePresence to fix warning */}
+              <HandwrittenAnnotation
+                isActive={splashComplete}
+                baseDelay={0.8}
+                className="lulu-voice lulu-mobile-only"
+                style={{
                   fontSize: "17px",
                   transform: "rotate(-1.5deg)",
                   color: "#3D2E1E",
-                  opacity: 0.8,
                   marginTop: "16px",
                   textAlign: "center",
                   lineHeight: 1.6,
                   position: "relative",
                   padding: "16px 28px",
-                  display: "inline-block"
-                }}>
-                  there's a form<br />
-                  down there,<br />
-                  don't be scared.
-
-                  {/* Imperfect circle around the text */}
-                  <svg style={{ position: "absolute", top: "0px", left: "50%", transform: "translateX(-50%)",
-                    width: "200px", height: "100px", overflow: "visible" }}
-                    viewBox="0 0 200 100">
-                    <path d="M 100 5 
-                      C 150 2 195 20 192 50 
-                      C 189 80 150 95 100 95 
-                      C 50 95 10 80 8 50 
-                      C 6 20 50 8 100 5 Z" 
-                      stroke="#3D2E1E" strokeWidth="1.5" 
-                      fill="none" opacity="0.3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"/>
-                  </svg>
-
-                  {/* Arrow pointing DOWN below the circle */}
-                  <svg style={{ position: "absolute", bottom: "-55px", left: "50%", transform: "translateX(-50%)",
-                    width: "40px", height: "50px", overflow: "visible" }}>
-                    <path d="M 20 0 C 25 15 25 35 20 48" 
-                      stroke="#3D2E1E" strokeWidth="1.5" 
-                      fill="none" opacity="0.6"
-                      strokeLinecap="round"/>
-                    <path d="M 12 38 L 20 48 L 28 38" 
-                      stroke="#3D2E1E" strokeWidth="1.5" 
-                      fill="none" opacity="0.6"
-                      strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </AnimatePresence>
+                  display: "inline-block",
+                  opacity: 0.8,
+                }}
+                textChunks={[
+                  { content: "there's a form", breakAfter: true },
+                  { content: "down there,", breakAfter: true },
+                  { content: "don't be scared." }
+                ]}
+                svgs={[
+                  {
+                    props: {
+                      style: { position: "absolute", top: "0px", left: "50%", transform: "translateX(-50%)", width: "200px", height: "100px", overflow: "visible" },
+                      viewBox: "0 0 200 100"
+                    },
+                    paths: [
+                      { d: "M 100 5 C 150 2 195 20 192 50 C 189 80 150 95 100 95 C 50 95 10 80 8 50 C 6 20 50 8 100 5 Z", strokeWidth: "1.5", opacity: "0.3" }
+                    ]
+                  },
+                  {
+                    props: {
+                      style: { position: "absolute", bottom: "-55px", left: "50%", transform: "translateX(-50%)", width: "40px", height: "50px", overflow: "visible" }
+                    },
+                    paths: [
+                      { d: "M 20 0 C 25 15 25 35 20 48", strokeWidth: "1.5", opacity: "0.6" },
+                      { d: "M 12 38 L 20 48 L 28 38", strokeWidth: "1.5", opacity: "0.6" }
+                    ]
+                  }
+                ]}
+              />
             </motion.div>
           </div>
 
-          <div className="lulu-voice annotation-2" style={{
-            position: "absolute",
-            top: "80px",
-            right: "60px",
-            "--lulu-voice-size": "19px",
-            transform: "rotate(2deg)",
-            color: "#3D2E1E",
-            opacity: 0.8,
-            pointerEvents: "none",
-            lineHeight: 1.6,
-            textAlign: "center"
-          } as any}>
-            there's a form<br />
-            down there,<br />
-            <span style={{ marginLeft: "8px" }}>
-              don't be
-            </span><br />
-            scared.
-            <svg style={{ position: "absolute", bottom: "-44px",
-              left: "20px", width: "32px", height: "44px",
-              overflow: "visible" }}>
-              <path d="M 16 0 C 18 12 14 28 8 40" 
-                stroke="#3D2E1E" strokeWidth="1.5" 
-                fill="none" opacity="0.6"
-                strokeLinecap="round"/>
-              <path d="M 2 34 L 8 42 L 16 36" 
-                stroke="#3D2E1E" strokeWidth="1.5" 
-                fill="none" opacity="0.6"
-                strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <svg style={{ position: "absolute", top: "-12px", left: "-16px",
-              width: "140px", height: "120px", overflow: "visible" }}>
-              <path d="M 70 6 C 105 2 132 20 135 50 
-                C 138 80 118 102 85 106 
-                C 52 110 12 95 6 65 
-                C 0 35 25 8 70 6 Z" 
-                stroke="#3D2E1E" strokeWidth="1.5" 
-                fill="none" opacity="0.3"
-                strokeLinecap="round"/>
-            </svg>
-          </div>
+          <HandwrittenAnnotation
+            isActive={splashComplete}
+            baseDelay={0.8}
+            className="lulu-voice annotation-2"
+            style={{
+              position: "absolute",
+              top: "80px",
+              right: "60px",
+              "--lulu-voice-size": "19px",
+              transform: "rotate(2deg)",
+              color: "#3D2E1E",
+              pointerEvents: "none",
+              lineHeight: 1.6,
+              textAlign: "center",
+              opacity: 0.8,
+            } as any}
+            textChunks={[
+              { content: "there's a form", breakAfter: true },
+              { content: "down there,", breakAfter: true },
+              { content: "don't be", marginLeft: "8px", breakAfter: true },
+              { content: "scared." }
+            ]}
+            svgs={[
+              {
+                props: {
+                  style: { position: "absolute", bottom: "-44px", left: "20px", width: "32px", height: "44px", overflow: "visible" }
+                },
+                paths: [
+                  { d: "M 16 0 C 18 12 14 28 8 40", strokeWidth: "1.5", opacity: "0.6" },
+                  { d: "M 2 34 L 8 42 L 16 36", strokeWidth: "1.5", opacity: "0.6" }
+                ]
+              },
+              {
+                props: {
+                  style: { position: "absolute", top: "-12px", left: "-16px", width: "140px", height: "120px", overflow: "visible" }
+                },
+                paths: [
+                  { d: "M 70 6 C 105 2 132 20 135 50 C 138 80 118 102 85 106 C 52 110 12 95 6 65 C 0 35 25 8 70 6 Z", strokeWidth: "1.5", opacity: "0.3" }
+                ]
+              }
+            ]}
+          />
 
           {/* Scroll cue */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.22 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 z-10"
+            animate={{ opacity: !splashComplete ? 0 : (scrolledPast ? 0 : 0.22) }}
+            transition={{ duration: scrolledPast ? 0.3 : 1, delay: scrolledPast ? 0 : 1 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 z-10 pointer-events-none"
           >
-            <div className="relative flex items-center justify-center">
-            </div>
             <div className="relative w-px h-11 overflow-hidden bg-lulu-bg/20">
               <motion.div
                 className="absolute inset-0 bg-lulu-bg"
-                animate={scrollLine.animate}
+                animate={prefersReducedMotion || scrolledPast || !splashComplete ? { scaleY: 0 } : scrollLine.animate}
                 transition={scrollLine.transition as any}
                 style={{ transformOrigin: "top" }}
               />
@@ -364,10 +377,11 @@ export default function Home() {
             {/* ── LEFT — Intrigue copy ─────────────────────────────────────── */}
             <div id="intrigue-col" className="flex flex-col gap-6 text-left" style={{ flex: "0 0 55%", maxWidth: "55%" }}>
               <motion.h2
-                initial={{ opacity: 0, y: 18 }}
+                initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.05 }}
-                transition={{ duration: 0.7, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.3 }}
+                onViewportEnter={() => setSection2InView(true)}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0 }}
                 className="font-display font-medium leading-[1.1] tracking-[-0.025em]"
                 style={{ fontSize: "clamp(24px, 3.2vw, 38px)", color: "#F5F0E6" }}
               >
@@ -381,76 +395,82 @@ export default function Home() {
               </motion.h2>
 
               <motion.p
-                initial={{ opacity: 0, y: 12 }}
+                initial={prefersReducedMotion ? { opacity: 0.4, y: 0 } : { opacity: 0, y: 16 }}
                 whileInView={{ opacity: 0.4, y: 0 }}
-                viewport={{ once: true, amount: 0.05 }}
-                transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
                 className="font-body"
                 style={{ fontSize: 15, fontStyle: "italic", color: "var(--color-lulu-bg)" }}
               >
                 that's all we're saying for now.
               </motion.p>
 
-              <svg style={{
-                display: "block",
-                width: "60px",
-                height: "40px",
-                overflow: "visible",
-                marginLeft: "20px",
-                opacity: 0.5
-              }} viewBox="0 0 60 40" className="annotation-3-arrow">
-                <path d="M 4 4 C 20 4 40 20 52 34" 
-                  stroke="#3D2E1E" strokeWidth="1.5" 
-                  fill="none"
-                  strokeLinecap="round"/>
-                <path d="M 44 32 L 54 36 L 50 26" 
-                  stroke="#3D2E1E" strokeWidth="1.5" 
-                  fill="none"
-                  strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <HandwrittenAnnotation
+                isActive={section2InView}
+                baseDelay={3.0} // Wait for text and circle below (text ~1.7s, circle 0.7s, delay 0.55s)
+                textChunks={[]}
+                svgs={[
+                  {
+                    props: {
+                      className: "annotation-3-arrow",
+                      style: { display: "block", width: "60px", height: "40px", overflow: "visible", marginLeft: "20px", opacity: 0.5 },
+                      viewBox: "0 0 60 40"
+                    },
+                    paths: [
+                      { d: "M 4 4 C 20 4 40 20 52 34", strokeWidth: "1.5", opacity: "1" },
+                      { d: "M 44 32 L 54 36 L 50 26", strokeWidth: "1.5", opacity: "1" }
+                    ]
+                  }
+                ]}
+              />
               
-              <div className="lulu-voice annotation-3" style={{
-                marginTop: "20px",
-                "--lulu-voice-size": "22px",
-                transform: "rotate(-1.5deg)",
-                color: "#3D2E1E",
-                opacity: 0.85,
-                display: "inline-block",
-                position: "relative",
-                lineHeight: 1.7,
-                textAlign: "left"
-              } as any}>
-                i know more.<br />
-                <span style={{ marginLeft: "8px" }}>
-                  i am not allowed
-                </span><br />
-                <span style={{ marginLeft: "24px" }}>
-                  to say yet.
-                </span>
-                <svg style={{ position: "absolute", top: "-16px", left: "-20px",
-                  width: "200px", height: "160px", overflow: "visible" }}
-                  viewBox="0 0 200 160" className="annotation-3-circle">
-                  <path d="M 100 8 C 150 2 188 28 192 70 
-                    C 196 112 168 148 120 154 
-                    C 72 160 18 138 8 96 
-                    C -2 54 28 12 100 8 Z" 
-                    stroke="#3D2E1E" strokeWidth="1.8" 
-                    fill="none" opacity="0.3"
-                    strokeLinecap="round"/>
-                </svg>
-              </div>
+              <HandwrittenAnnotation
+                isActive={section2InView}
+                baseDelay={0.55}
+                className="lulu-voice annotation-3"
+                style={{
+                  marginTop: "20px",
+                  "--lulu-voice-size": "22px",
+                  transform: "rotate(-1.5deg)",
+                  color: "#3D2E1E",
+                  display: "inline-block",
+                  position: "relative",
+                  lineHeight: 1.7,
+                  textAlign: "left",
+                  opacity: 0.85,
+                } as any}
+                textChunks={[
+                  { content: "i know more.", breakAfter: true },
+                  { content: "i am not allowed", marginLeft: "8px", breakAfter: true },
+                  { content: "to say yet.", marginLeft: "24px" }
+                ]}
+                svgs={[
+                  {
+                    props: {
+                      className: "annotation-3-circle",
+                      style: { position: "absolute", top: "-16px", left: "-20px", width: "200px", height: "160px", overflow: "visible" },
+                      viewBox: "0 0 200 160"
+                    },
+                    paths: [
+                      { d: "M 100 8 C 150 2 188 28 192 70 C 196 112 168 148 120 154 C 72 160 18 138 8 96 C -2 54 28 12 100 8 Z", strokeWidth: "1.8", opacity: "0.3" }
+                    ]
+                  }
+                ]}
+              />
             </div>
 
             {/* ── RIGHT — Glass card + form ────────────────────────────────── */}
             <div id="form-col" className="flex justify-center" style={{ flex: "0 0 45%", maxWidth: "45%" }}>
               <motion.div
                 id="form-card"
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.05 }}
-                transition={{ duration: 0.85, ease: "easeOut" }}
+                initial={prefersReducedMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                onAnimationComplete={() => setFormCardAnimationComplete(true)}
+                transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
                 className="relative w-full max-w-[460px] rounded-[24px]"
                 style={{
+                  willChange: "transform, opacity",
                   padding: "36px 40px 40px",
                   backgroundColor: "rgba(245, 240, 230, 0.45)",
                   backdropFilter: "blur(24px) saturate(140%)",
@@ -468,7 +488,7 @@ export default function Home() {
                   }}
                 />
 
-                <WaitlistForm onSubmitted={() => setFormSubmitted(true)} />
+                <WaitlistForm onSubmitted={() => setFormSubmitted(true)} isFormCardComplete={formCardAnimationComplete} />
               </motion.div>
             </div>
           </div>
