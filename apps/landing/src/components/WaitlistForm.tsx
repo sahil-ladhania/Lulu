@@ -3,6 +3,7 @@
 import { useState, FormEvent, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toast, ToastType } from "@/components/Toast";
+import { ProofCounter } from "./ProofCounter";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -580,6 +581,9 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
             </AnimatePresence>
           </span>
         </button>
+
+        {/* Proof Counter */}
+        <ProofCounter />
 
         {/* Legal */}
         <div 
