@@ -19,21 +19,15 @@ const CITY_HINTS: Record<string, string> = {
 
 // ─── Input styles ─────────────────────────────────────────────────────────────
 const inputBase: React.CSSProperties = {
-  padding: "13px 15px",
-  backgroundColor: "rgba(15, 13, 11, 0.04)",
-  border: "none",
-  borderRadius: 10,
+  padding: "12px 4px 12px 4px",
+  width: "100%",
+  fontFamily: "'Switzer', sans-serif",
   fontSize: 15,
   color: "var(--color-lulu-bg)",
   outline: "none",
   boxShadow: "none",
-  width: "100%",
-  transition: "background-color 0.2s ease",
-  fontFamily: "'Switzer', sans-serif",
 };
-const inputFocus: React.CSSProperties = {
-  backgroundColor: "rgba(15, 13, 11, 0.07)",
-};
+const inputFocus: React.CSSProperties = {};
 // inputError removed — validation uses quirky placeholders instead
 const placeholderColor = "rgba(15, 13, 11, 0.25)";
 
@@ -42,17 +36,17 @@ const placeholderColor = "rgba(15, 13, 11, 0.25)";
 /** Chevron icon */
 const Chevron = ({ open }: { open: boolean }) => (
   <motion.svg
-    width="10"
-    height="6"
-    viewBox="0 0 10 6"
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
     fill="none"
     animate={{ rotate: open ? 180 : 0 }}
-    transition={{ duration: 0.2 }}
+    transition={{ duration: 0.2, ease: "easeInOut" }}
   >
     <path
-      d="M1 1L5 5L9 1"
-      stroke="rgba(15, 13, 11, 0.3)"
-      strokeWidth="1.5"
+      d="M3 4.5L6 7.5L9 4.5"
+      stroke="#B8761A"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -88,10 +82,9 @@ const CityDropdown = ({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between font-body rounded-[10px] cursor-pointer"
+        className={`w-full flex items-center justify-between font-body cursor-pointer lulu-input ${open ? 'is-open' : ''}`}
         style={{
           ...inputBase,
-          ...(open ? inputFocus : {}),
           textAlign: "left",
         }}
       >
@@ -101,10 +94,11 @@ const CityDropdown = ({
               ? "var(--color-lulu-bg)"
               : showQuirky
               ? "rgba(184,118,26,0.7)"
-              : "rgba(15, 13, 11, 0.25)",
+              : "rgba(15, 13, 11, 0.35)",
+            textTransform: "lowercase",
           }}
         >
-          {value || (showQuirky ? "pick a city. any city." : "select your city")}
+          {value ? value.toLowerCase() : (showQuirky ? "pick a city. any city." : "select your city")}
         </span>
         <Chevron open={open} />
       </button>
@@ -117,12 +111,19 @@ const CityDropdown = ({
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
             exit={{ opacity: 0, y: -6, scaleY: 0.95 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-0 right-0 top-[calc(100%+6px)] rounded-[10px] z-50 py-1 overflow-hidden"
+            className="absolute left-0 right-0 z-50 overflow-hidden"
             style={{
               transformOrigin: "top",
-              backgroundColor: "#F5F0E6",
-              border: "1px solid rgba(15, 13, 11, 0.08)",
-              boxShadow: "0 16px 40px rgba(15, 13, 11, 0.08)",
+              top: "calc(100% + 8px)",
+              width: "100%",
+              maxWidth: "100%",
+              background: "rgba(245, 240, 230, 0.95)",
+              backdropFilter: "blur(20px) saturate(140%)",
+              WebkitBackdropFilter: "blur(20px) saturate(140%)",
+              border: "1px solid rgba(184, 118, 26, 0.18)",
+              borderRadius: "12px",
+              boxShadow: "0 12px 32px rgba(61, 46, 30, 0.12), 0 4px 12px rgba(61, 46, 30, 0.06)",
+              padding: "6px",
             } as React.CSSProperties}
           >
             {CITIES.map((city) => {
@@ -135,29 +136,31 @@ const CityDropdown = ({
                     onChange(city);
                     setOpen(false);
                   }}
-                  className="w-full flex items-center justify-between font-body text-[15px] px-4 py-[13px] transition-all duration-150 cursor-pointer"
                   style={{
-                    color: isSelected ? "var(--color-lulu-marigold-light)" : "rgba(15, 13, 11, 0.75)",
-                    backgroundColor: "transparent",
+                    display: "block",
+                    width: "100%",
+                    padding: "10px 12px",
+                    background: isSelected ? "rgba(184, 118, 26, 0.12)" : "transparent",
                     border: "none",
+                    borderRadius: "8px",
                     textAlign: "left",
                     fontFamily: "'Switzer', sans-serif",
+                    fontSize: "14px",
+                    color: isSelected ? "#B8761A" : "var(--color-lulu-bg)",
+                    cursor: "pointer",
+                    transition: "background-color 150ms ease",
+                    textTransform: "lowercase",
                   }}
                   onMouseEnter={(e) => {
                     const target = e.currentTarget as HTMLButtonElement;
-                    target.style.backgroundColor = "rgba(15, 13, 11, 0.06)";
-                    target.style.color = "var(--color-lulu-marigold-light)";
+                    if (!isSelected) target.style.backgroundColor = "rgba(184, 118, 26, 0.08)";
                   }}
                   onMouseLeave={(e) => {
                     const target = e.currentTarget as HTMLButtonElement;
-                    target.style.backgroundColor = "transparent";
-                    target.style.color = isSelected ? "var(--color-lulu-marigold-light)" : "rgba(15, 13, 11, 0.75)";
+                    if (!isSelected) target.style.backgroundColor = "transparent";
                   }}
                 >
-                  <span>{city}</span>
-                  {isSelected && (
-                    <div className="w-[5px] h-[5px]" style={{ borderRadius: "50%", background: "#B8761A" }} />
-                  )}
+                  {city.toLowerCase()}
                 </button>
               );
             })}
@@ -178,11 +181,16 @@ const Field = ({
   label: string;
   children: React.ReactNode;
 }) => (
-  <div className="flex flex-col gap-1.5">
+  <div className="flex flex-col gap-[4px]">
     <label
       htmlFor={id}
-      className="font-body font-medium text-[11px] uppercase tracking-[0.14em] px-1"
-      style={{ color: "rgba(15, 13, 11, 0.35)" }}
+      className="font-body font-medium uppercase"
+      style={{
+        fontSize: 11,
+        letterSpacing: "0.18em",
+        color: "rgba(184, 118, 26, 0.7)",
+        padding: 0,
+      }}
     >
       {label}
     </label>
@@ -350,19 +358,68 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
       <style>{`
         .lulu-input::placeholder { color: ${placeholderColor}; }
         .lulu-input-quirky::placeholder { color: rgba(184, 118, 26, 0.7) !important; }
-        .lulu-input { caret-color: var(--color-lulu-marigold-light); }
+        .lulu-input {
+          caret-color: var(--color-lulu-marigold-light);
+          background-color: transparent !important;
+          border-top: none !important;
+          border-left: none !important;
+          border-right: none !important;
+          border-bottom: 1.5px solid rgba(15, 13, 11, 0.15) !important;
+          border-radius: 0 !important;
+          transition: border-bottom-color 250ms ease !important;
+        }
+        .lulu-input.is-open,
         .lulu-input:focus,
         .lulu-input:focus-visible,
         .lulu-input:focus-within {
           outline: none !important;
           box-shadow: none !important;
-          border: none !important;
+          border-bottom-color: #B8761A !important;
         }
         .lulu-input:not(:placeholder-shown),
         .lulu-input:valid {
           outline: none !important;
           box-shadow: none !important;
-          border: none !important;
+        }
+        .lulu-cta {
+          padding: 16px;
+          background: linear-gradient(to bottom, #C4811F 0%, #B8761A 50%, #A86A14 100%);
+          color: #F5F0E6;
+          border-radius: 12px;
+          font-size: 17px;
+          font-weight: 500;
+          letter-spacing: -0.02em;
+          border: none;
+          cursor: pointer;
+          position: relative;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 220, 150, 0.35),
+            0 1px 2px rgba(0, 0, 0, 0.06),
+            0 8px 24px rgba(184, 118, 26, 0.28),
+            0 12px 40px rgba(184, 118, 26, 0.15);
+          transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+        .lulu-cta:hover {
+          transform: translateY(-2px);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 220, 150, 0.4),
+            0 1px 2px rgba(0, 0, 0, 0.06),
+            0 12px 32px rgba(184, 118, 26, 0.34),
+            0 16px 48px rgba(184, 118, 26, 0.2);
+        }
+        .lulu-cta:active {
+          transform: translateY(0);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 220, 150, 0.3),
+            0 1px 2px rgba(0, 0, 0, 0.08),
+            0 4px 12px rgba(184, 118, 26, 0.24);
+        }
+        .lulu-cta:hover .cta-arrow {
+          transform: translateX(4px);
+        }
+        .cta-arrow {
+          display: inline-block;
+          transition: transform 250ms ease;
         }
       `}</style>
 
@@ -404,10 +461,7 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
               setBlurred((p) => ({ ...p, name: true }));
             }}
             className={`lulu-input font-body${quirky.name ? " lulu-input-quirky" : ""}`}
-            style={{
-              ...inputBase,
-              ...(focused.name ? inputFocus : {}),
-            }}
+            style={inputBase}
           />
           {/* Name microcopy */}
           <AnimatePresence>
@@ -445,10 +499,7 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
               setBlurred((p) => ({ ...p, email: true }));
             }}
             className={`lulu-input font-body${quirky.email ? " lulu-input-quirky" : ""}`}
-            style={{
-              ...inputBase,
-              ...(focused.email ? inputFocus : {}),
-            }}
+            style={inputBase}
           />
           {/* Email microcopy */}
           <AnimatePresence>
@@ -498,23 +549,14 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
         </Field>
 
         {/* CTA */}
-        <motion.button
+        <button
           type="submit"
           disabled={submitting || locking}
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}
-          whileHover={{ y: -1, boxShadow: "0 6px 24px rgba(184,118,26,0.4)" }}
-          whileTap={{ y: 1, boxShadow: "0 2px 8px rgba(184,118,26,0.2)" }}
-          className="relative w-full mt-2 overflow-hidden font-display font-medium rounded-[10px] disabled:opacity-60"
+          className="lulu-cta w-full mt-2 font-display disabled:opacity-60"
           style={{
-            fontSize: 17,
-            padding: "15px",
-            background: "#B8761A",
-            color: "#F5F0E6",
-            letterSpacing: "-0.03em",
-            border: "none",
             cursor: submitting || locking ? "not-allowed" : "pointer",
-            boxShadow: "0 4px 16px rgba(184,118,26,0.3)",
           }}
         >
           <span className="relative z-10 flex items-center justify-center gap-2 h-[24px]">
@@ -532,12 +574,12 @@ export const WaitlistForm = ({ onSubmitted }: { onSubmitted?: () => void }) => {
                   : idleMessage
                   ? idleMessage
                   : hovering
-                  ? "go on — you know you want to."
-                  : <>i'm in. obviously. <span>→</span></>}
+                  ? <>go on — you know you want to. <span className="cta-arrow">→</span></>
+                  : <>i'm in. obviously. <span className="cta-arrow">→</span></>}
               </motion.span>
             </AnimatePresence>
           </span>
-        </motion.button>
+        </button>
 
         {/* Legal */}
         <div 

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@lulu/ui/components";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { SplashScreen } from "@/components/SplashScreen";
+import { AtmosphereLayers } from "@/components/AtmosphereLayers";
 
 // ─── Animation constants ──────────────────────────────────────────────────────
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -108,7 +109,9 @@ export default function Home() {
         transition={{ duration: 0.7, ease: "easeInOut" }}
         className="relative bg-lulu-cream text-lulu-bg overflow-x-hidden lowercase"
       >
-        <div className="lulu-voice annotation-1" style={{
+        <AtmosphereLayers />
+        <div className="relative z-10">
+          <div className="lulu-voice annotation-1" style={{
           position: "fixed",
           top: "90px",
           left: "45px",
@@ -448,12 +451,12 @@ export default function Home() {
                 transition={{ duration: 0.85, ease: "easeOut" }}
                 className="relative w-full max-w-[460px] rounded-[24px]"
                 style={{
-                  padding: "32px 36px 36px",
-                  backgroundColor: "rgba(15,13,11,0.04)",
-                  backdropFilter: "blur(60px) saturate(120%)",
-                  WebkitBackdropFilter: "blur(60px) saturate(120%)",
-                  border: "1px solid rgba(15,13,11,0.08)",
-                  boxShadow: "0 24px 48px rgba(15,13,11,0.08)",
+                  padding: "36px 40px 40px",
+                  backgroundColor: "rgba(245, 240, 230, 0.45)",
+                  backdropFilter: "blur(24px) saturate(140%)",
+                  WebkitBackdropFilter: "blur(24px) saturate(140%)",
+                  border: "1px solid rgba(184, 118, 26, 0.18)",
+                  boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 24px 60px rgba(61, 46, 30, 0.10), 0 4px 12px rgba(61, 46, 30, 0.06)",
                 }}
               >
                 {/* Top-edge marigold glow */}
@@ -473,57 +476,77 @@ export default function Home() {
 
 
         {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
-        <footer id="footer" className="relative z-10 px-12 py-7 flex flex-row items-center justify-between gap-6">
-          {/* LEFT — Identity */}
-          <div className="flex-1 flex items-center gap-2 justify-start">
-            <Logo
-              variant="mark"
-              color="marigold"
-              size={20}
-              style={{ opacity: 0.5 }}
-            />
-            <div
-              className="font-display font-medium flex items-baseline"
-              style={{ fontSize: 15, letterSpacing: "-0.03em", color: "rgba(15, 13, 11, 0.4)" }}
-            >
-              lulu
-              <span style={{
-                display: "inline-block",
-                width: "4px",
-                height: "4px",
-                borderRadius: "50%",
-                background: "rgba(15, 13, 11, 0.3)",
-                marginLeft: "1px",
-                verticalAlign: "middle",
-                position: "relative",
-                bottom: "1px"
-              }} />
+        <footer id="footer" className="relative z-10 w-full max-w-[1200px] mx-auto flex flex-col px-[20px] md:px-[24px] lg:px-[48px] pt-[24px] md:pt-[48px] pb-[24px] lg:pb-[40px]">
+          {/* Row 2 — Three small columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-[24px] md:gap-[32px] w-full items-start">
+            
+            {/* Left column — brand mark + tagline */}
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <div className="flex items-center gap-[8px]">
+                <Logo variant="mark" color="marigold" size={20} style={{ opacity: 0.7 }} />
+                <div className="font-display font-medium flex items-baseline lowercase" style={{ fontSize: 16, letterSpacing: "-0.03em", color: "rgba(15, 13, 11, 0.5)" }}>
+                  lulu
+                  <span style={{
+                    display: "inline-block",
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    background: "var(--color-lulu-marigold-light)",
+                    marginLeft: "1px",
+                    verticalAlign: "middle",
+                    position: "relative",
+                    bottom: "1px"
+                  }} />
+                </div>
+              </div>
+              <div className="font-body mt-[8px] hidden md:block" style={{ fontSize: 13, color: "rgba(15, 13, 11, 0.4)" }}>match deeper, reveal later.</div>
+            </div>
+
+            {/* Center column — three trust lines */}
+            <div className="hidden md:flex flex-col items-center">
+              <div className="flex flex-col gap-[10px] md:gap-[12px]">
+                {[
+                  "we don't sell your data.",
+                  "we don't send spam.",
+                  "we don't make you wait long."
+                ].map((text, i) => (
+                  <div key={i} className="flex items-center gap-[8px]">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B8761A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="font-body" style={{ fontSize: 13, color: "rgba(15, 13, 11, 0.5)" }}>{text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right column — social + email */}
+            <div className="flex flex-row md:flex-col justify-center md:justify-end items-center md:items-end gap-[20px] md:gap-[10px]">
+              {[
+                { label: "instagram", href: "https://www.instagram.com/getluluapp/", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="social-icon-svg"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> },
+                { label: "twitter", href: "https://x.com/getluluapp", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="social-icon-svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg> },
+                { label: "linkedin", href: "https://www.linkedin.com/company/getluluapp/", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="social-icon-svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg> },
+                { label: "getluluapp@gmail.com", href: "mailto:getluluapp@gmail.com", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="social-icon-svg"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> }
+              ].map((item, i) => (
+                <a key={i} href={item.href} target="_blank" rel="noopener noreferrer" className="social-row flex items-center gap-[10px]">
+                  {item.icon}
+                  <span className="social-label font-body text-[13px] hidden md:inline">{item.label}</span>
+                </a>
+              ))}
+            </div>
+            
+          </div>
+
+          {/* Final hairline + copyright */}
+          <div className="w-full mt-[32px] md:mt-[48px]">
+            <div className="w-full h-px hidden md:block" style={{ background: "rgba(15, 13, 11, 0.08)" }} />
+            <div className="text-center font-body mt-0 md:mt-[24px]" style={{ fontSize: 11, color: "rgba(15, 13, 11, 0.3)", letterSpacing: "0.02em" }}>
+              © 2026 lulu. all rights reserved.
             </div>
           </div>
 
-          {/* CENTER — Brand line */}
-          <div className="flex-1 text-center">
-            <p className="font-body" style={{ fontSize: 13, color: "rgba(15, 13, 11, 0.3)" }}>
-              lulu stays. that's the whole story.
-            </p>
-          </div>
-
-          {/* RIGHT — Social icons */}
-          <div className="flex-1 flex items-center gap-[18px] justify-end">
-            <a href="https://www.instagram.com/getluluapp/" target="_blank" rel="noopener noreferrer" aria-label="lulu on instagram" className="social-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-            </a>
-            <a href="https://x.com/getluluapp" target="_blank" rel="noopener noreferrer" aria-label="lulu on twitter" className="social-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-            </a>
-            <a href="https://www.linkedin.com/company/getluluapp/" target="_blank" rel="noopener noreferrer" aria-label="lulu on linkedin" className="social-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-            </a>
-            <a href="mailto:getluluapp@gmail.com" aria-label="email lulu" className="social-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-            </a>
-          </div>
         </footer>
+        </div>
         <style dangerouslySetInnerHTML={{
           __html: `
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -554,9 +577,6 @@ export default function Home() {
           #form-card {
             padding: 32px 28px !important;
             width: 100% !important;
-          }
-          #footer {
-            padding: 24px 32px !important;
           }
         }
         .lulu-mobile-only { display: none; }
@@ -593,12 +613,6 @@ export default function Home() {
           #form-card { 
             padding: 32px 20px !important; 
             width: 100% !important; 
-          }
-          #footer { 
-            flex-direction: column !important; 
-            gap: 20px !important; 
-            padding: 24px 20px !important; 
-            text-align: center !important; 
           }
           .annotation-1 {
             position: relative !important;
@@ -685,11 +699,6 @@ export default function Home() {
             bottom: auto !important;
             transform: rotate(-1.5deg) !important;
           }
-          #footer > div {
-            flex: none !important;
-            width: 100% !important;
-            justify-content: center !important;
-          }
         }
         .lulu-mobile-only {
           display: none !important;
@@ -698,12 +707,23 @@ export default function Home() {
           .lulu-mobile-only {
             display: inline-block !important;
           }
+          .social-icon-svg {
+            width: 20px !important;
+            height: 20px !important;
+          }
         }
-        .social-icon {
-          color: rgba(15, 13, 11, 0.3);
-          transition: all 0.4s ease;
+        .social-row {
+          color: rgba(15, 13, 11, 0.4);
+          cursor: pointer;
         }
-        .social-icon:hover {
+        .social-row .social-label {
+          color: rgba(15, 13, 11, 0.5);
+          transition: color 0.2s ease;
+        }
+        .social-row .social-icon-svg {
+          transition: color 0.2s ease;
+        }
+        .social-row:hover .social-label, .social-row:hover .social-icon-svg {
           color: var(--color-lulu-marigold-light);
         }
         @keyframes pulse-ring {
